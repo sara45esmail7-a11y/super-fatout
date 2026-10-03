@@ -1,0 +1,3934 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سوبر فطوط</title>
+
+<style>
+*{box-sizing:border-box;}
+
+html,body{
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+}
+
+body{
+  font-family:Arial,Tahoma,sans-serif;
+  background:
+    radial-gradient(circle at 50% 0%,#1672c9 0%,#082c63 45%,#03162f 100%);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  color:#fff;
+  overflow:hidden;
+}
+
+#game-container{
+  position:relative;
+  width:min(94vw,390px);
+  height:min(90dvh,760px);
+  max-height:calc(100dvh - 20px);
+  transform:none;
+  overflow:hidden;
+  border:4px solid #31e1ff;
+  border-radius:22px;
+  background:#0751a0;
+  box-shadow:
+    0 0 30px rgba(38,222,255,.45),
+    inset 0 0 30px rgba(0,0,0,.25);
+}
+
+.screen{
+  position:absolute;
+  inset:0;
+  z-index:30;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:20px;
+}
+
+.hidden{
+  display:none !important;
+}
+
+#splash-screen{
+  position:absolute;
+  inset:0;
+  z-index:200;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  background:radial-gradient(circle at 50% 38%,#1789e8 0%,#0863b5 45%,#052c63 100%);
+  text-align:center;
+}
+
+.splash-title{
+  position:absolute;
+  top:28px;
+  left:0;
+  right:0;
+  margin:0;
+  font-size:62px;
+  font-weight:1000;
+  color:#ffd52f;
+  text-shadow:0 6px 0 #d95f00,0 0 22px rgba(255,213,47,.7);
+  opacity:0;
+  transform:translateY(-20px) scale(.65) rotate(-2deg);
+  animation:splashTitleIn .5s cubic-bezier(.2,1.4,.3,1) 2.95s forwards;
+  z-index:40;
+  pointer-events:none;
+}
+
+.splash-fatout{
+  position:relative;
+  width:76px;
+  height:112px;
+  margin:0;
+  filter:drop-shadow(0 9px 5px rgba(0,0,0,.32));
+  transform-origin:center center;
+  transform-style:preserve-3d;
+  animation:splashHeroFly 2.75s cubic-bezier(.18,.82,.16,1) forwards;
+  z-index:10;
+}
+.splash-fatout .f-shadow{display:none;}
+.splash-fatout .f-body{background:linear-gradient(180deg,#e92b32,#b91421);}
+.splash-fatout .f-shirt{background:#ffd52f;border:2px solid #d58b00;width:25px;height:22px;}
+.splash-fatout .f-shirt::after{content:"S";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#e3262f;font-size:15px;font-weight:1000;font-family:Arial,sans-serif;}
+.splash-cape{position:absolute;left:-9px;top:62px;width:35px;height:48px;background:linear-gradient(180deg,#ef3030,#a90f1d);clip-path:polygon(100% 0,100% 100%,0 82%,15% 0);transform:rotate(8deg);z-index:1;filter:drop-shadow(2px 3px 2px rgba(0,0,0,.25));}
+
+@keyframes splashHeroFly{
+  0%{transform:perspective(700px) translateZ(-1100px) rotateX(72deg) scale(.08);opacity:0;}
+  62%{transform:perspective(700px) translateZ(-170px) rotateX(70deg) scale(.72);opacity:1;}
+  78%{transform:perspective(700px) translateZ(90px) rotateX(70deg) scale(1.55);opacity:1;}
+  88%{transform:perspective(700px) translateZ(230px) rotateX(70deg) scale(2.35);opacity:1;}
+  91%{transform:perspective(700px) translateZ(280px) rotateX(58deg) scale(2.65);opacity:1;}
+  96%{transform:perspective(700px) translateZ(70px) rotateX(15deg) scale(1.65);opacity:1;}
+  100%{transform:perspective(700px) translateZ(20px) rotateX(70deg) scale(1.55);opacity:1;}
+}
+
+.splash-fatout .f-arm-left{left:-18px;animation:splashArmLeft 2.75s cubic-bezier(.18,.82,.16,1) forwards;}
+.splash-fatout .f-arm-right{right:-18px;animation:splashArmRight 2.75s cubic-bezier(.18,.82,.16,1) forwards;}
+.splash-fatout .f-leg-left,.splash-fatout .f-leg-right{animation:splashLegs 2.75s cubic-bezier(.18,.82,.16,1) forwards;}
+@keyframes splashArmLeft{0%,88%{transform:rotate(62deg);}96%{transform:rotate(28deg);}100%{transform:rotate(12deg);}}
+@keyframes splashArmRight{0%,88%{transform:rotate(-62deg);}96%{transform:rotate(-75deg);}100%{transform:rotate(-90deg);}}
+@keyframes splashLegs{0%,88%{transform:rotate(8deg);}96%{transform:rotate(6deg);}100%{transform:rotate(5deg);}}
+
+/* كسر الشاشة بشكل كرتوني */
+.splash-glass{
+  position:absolute;
+  inset:0;
+  z-index:30;
+  pointer-events:none;
+  opacity:0;
+  animation:glassBurst 1.15s ease-out 2.35s forwards;
+}
+.splash-glass::before{
+  content:"";
+  position:absolute;
+  left:50%;top:50%;
+  width:12px;height:12px;
+  border:3px solid rgba(255,255,255,.95);
+  border-radius:50%;
+  transform:translate(-50%,-50%) scale(.2);
+  box-shadow:0 0 0 2px rgba(116,220,255,.4),0 0 28px rgba(255,255,255,.7);
+  animation:glassCrack .7s ease-out 2.35s forwards;
+}
+.splash-glass::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(34deg,transparent 48%,rgba(255,255,255,.85) 49%,transparent 50%),
+    linear-gradient(146deg,transparent 48%,rgba(255,255,255,.75) 49%,transparent 50%),
+    linear-gradient(78deg,transparent 49%,rgba(255,255,255,.7) 50%,transparent 51%),
+    linear-gradient(102deg,transparent 49%,rgba(255,255,255,.7) 50%,transparent 51%);
+  opacity:0;
+  animation:crackLines .55s ease-out 2.35s forwards;
+}
+@keyframes glassCrack{to{transform:translate(-50%,-50%) scale(18);opacity:0;}}
+@keyframes crackLines{0%{opacity:0;transform:scale(.2);}35%{opacity:1;transform:scale(1);}100%{opacity:0;transform:scale(1.08);}}
+@keyframes glassBurst{0%{opacity:0;}18%{opacity:1;}55%{opacity:1;}100%{opacity:0;}}
+
+.splash-title{ }
+@keyframes splashTitleIn{from{opacity:0;transform:translateY(-20px) scale(.65) rotate(-2deg);}to{opacity:1;transform:translateY(0) scale(1) rotate(0);}}
+
+.splash-start-btn{
+  position:absolute;
+  bottom:52px;
+  min-width:225px;
+  padding:14px 26px;
+  border:3px solid rgba(255,255,255,.95);
+  border-radius:20px;
+  background:linear-gradient(135deg,#ffd52f,#ff8a00);
+  color:#17305e;
+  font-size:24px;
+  font-weight:1000;
+  box-shadow:0 8px 0 #b95c00,0 0 26px rgba(255,213,47,.7);
+  cursor:pointer;
+  opacity:0;
+  transform:translateY(18px) scale(.8);
+  animation:splashStartIn .55s cubic-bezier(.2,1.4,.3,1) 3.2s forwards;
+  z-index:45;
+}
+.splash-start-btn:active{transform:translateY(5px) scale(.96);box-shadow:0 3px 0 #b95c00,0 0 18px rgba(255,213,47,.5);}
+@keyframes splashStartIn{from{opacity:0;transform:translateY(18px) scale(.8);}to{opacity:1;transform:translateY(0) scale(1);}}
+.splash-credit{position:absolute;bottom:24px;color:rgba(255,255,255,.9);font-size:13px;font-weight:bold;direction:ltr;opacity:0;animation:splashCreditIn .45s ease-out 3.15s forwards;z-index:45;}
+@keyframes splashCreditIn{from{opacity:0;transform:translateY(7px);}to{opacity:1;transform:translateY(0);}}
+
+#mode-screen{
+  background:
+    radial-gradient(circle at 50% 20%,#1169bc,transparent 35%),
+    linear-gradient(#063d80,#06245a 70%,#07366c);
+  padding-top:27px;
+}
+
+.brand-title{
+  font-size:38px;
+  font-weight:1000;
+  color:#ffd52f;
+  text-shadow:
+    0 4px 0 #e36d00,
+    0 0 15px rgba(255,213,47,.5);
+}
+
+#mode-screen h2{
+  margin:15px 0;
+  font-size:20px;
+}
+
+.menu-btn{
+  width:min(100%,310px);
+  border:none;
+  border-radius:18px;
+  padding:14px 18px;
+  margin:6px 0;
+  color:#fff;
+  font-size:18px;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:
+    0 6px 0 rgba(0,0,0,.25),
+    0 0 15px rgba(255,255,255,.12);
+  transition:.15s;
+}
+
+.menu-btn:active{
+  transform:translateY(5px);
+}
+
+.menu-btn small{
+  display:block;
+  font-size:12px;
+  margin-top:4px;
+}
+
+.orange-btn{
+  background:linear-gradient(135deg,#ffb51b,#ff6416);
+}
+
+.blue-btn{
+  background:linear-gradient(135deg,#25c7ff,#1766ff);
+}
+
+.green-btn{
+  background:linear-gradient(135deg,#38dc76,#079d55);
+}
+
+.purple-btn{
+  background:linear-gradient(135deg,#b16cff,#6735d8);
+}
+
+.mascot-main{
+  margin-top:18px;
+  font-size:55px;
+}
+
+.back-btn{
+  align-self:flex-start;
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:12px;
+  padding:8px 12px;
+  background:rgba(255,255,255,.1);
+  color:#fff;
+  cursor:pointer;
+}
+
+.screen-subtitle{
+  color:#c9efff;
+  margin-top:0;
+}
+
+
+/* ===== عالم الروضة ===== */
+.nursery-sections-grid{
+  width:100%;
+  max-width:250px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  margin-top:10px;
+}
+
+.nursery-section-btn{
+  width:100%;
+  max-width:240px;
+  min-height:82px;
+  border:none;
+  border-radius:22px;
+  color:#fff;
+  cursor:pointer;
+  background:linear-gradient(135deg,#ffbd35,#ff6b35);
+  box-shadow:0 7px 0 rgba(0,0,0,.22),0 0 18px rgba(255,255,255,.15);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  transition:.15s;
+}
+
+.nursery-section-btn:active{
+  transform:translateY(5px);
+}
+
+.nursery-section-btn span{
+  font-size:30px;
+}
+
+.nursery-section-btn strong{
+  font-size:17px;
+}
+
+#nursery-lesson-screen{
+  padding:14px;
+  background:
+    radial-gradient(circle at 50% 18%,#5fdcff 0%,transparent 35%),
+    linear-gradient(#0879c9 0%,#07509b 58%,#063b78 100%);
+}
+
+.nursery-lesson-top{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+}
+
+.nursery-counter{
+  font-weight:900;
+  background:rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:12px;
+  padding:7px 10px;
+}
+
+.nursery-lesson-title{
+  margin:8px 0 2px;
+  font-size:22px;
+}
+
+.nursery-lesson-subtitle{
+  margin:0 0 5px;
+  color:#e9fbff;
+  font-size:14px;
+}
+
+.nursery-scene{
+  position:relative;
+  width:100%;
+  max-width:330px;
+  height:380px;
+  margin-top:4px;
+  overflow:hidden;
+  border-radius:24px;
+  background:
+    radial-gradient(circle at 80% 17%,rgba(255,255,255,.9) 0 12px,transparent 13px),
+    linear-gradient(#62d9ff 0%,#b6efff 62%,#70d37b 62%,#4bb55d 100%);
+  box-shadow:inset 0 -12px 0 rgba(0,0,0,.08),0 8px 20px rgba(0,0,0,.2);
+}
+
+.nursery-cloud{
+  position:absolute;
+  font-size:36px;
+  opacity:.85;
+}
+
+.nursery-cloud.one{top:28px;left:22px;}
+.nursery-cloud.two{top:72px;right:28px;font-size:30px;}
+
+.nursery-number-card{
+  position:absolute;
+  top:28px;
+  left:50%;
+  transform:translateX(-50%);
+  width:90%;
+  padding:10px 12px;
+  border-radius:18px;
+  background:rgba(255,255,255,.92);
+  color:#0751a0;
+  text-align:center;
+  box-shadow:0 5px 0 rgba(0,0,0,.12);
+}
+
+.nursery-big-number{
+  display:block;
+  font-size:64px;
+  line-height:1;
+  font-weight:1000;
+  color:#ff6a1a;
+}
+
+.nursery-objects{
+  min-height:52px;
+  margin:7px auto 0;
+  width:100%;
+  max-width:280px;
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  align-items:center;
+  justify-items:center;
+  gap:2px;
+  font-size:21px;
+  line-height:1;
+}
+
+/* قسم ١١ - ٢٠: بدون ترابيزة/منصة، والأشكال كلها تحت الرقم */
+#nursery-lesson-screen.nursery-lesson-11-20 .nursery-number-card{
+  background:transparent;
+  box-shadow:none;
+  width:92%;
+  padding:4px 4px 0;
+}
+
+#nursery-lesson-screen.nursery-lesson-11-20 .nursery-platform{
+  display:none;
+}
+
+#nursery-lesson-screen.nursery-lesson-11-20 .nursery-big-number{
+  font-size:58px;
+}
+
+#nursery-lesson-screen.nursery-lesson-11-20 .nursery-objects{
+  max-width:300px;
+  grid-template-columns:repeat(6,1fr);
+  gap:4px 2px;
+  font-size:28px;
+  min-height:90px;
+}
+
+#nursery-lesson-screen.nursery-lesson-11-20 .nursery-count-item{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:30px;
+  line-height:1;
+  font-size:28px;
+}
+
+.nursery-platform{
+  position:absolute;
+  left:50%;
+  bottom:68px;
+  transform:translateX(-50%);
+  width:205px;
+  height:26px;
+  border-radius:12px 12px 8px 8px;
+  background:linear-gradient(#ffc83d,#e58c12);
+  border:3px solid #9b5b09;
+  box-shadow:0 8px 0 #9b5b09;
+}
+
+.nursery-platform > span{
+  position:absolute;
+  left:50%;
+  top:-46px;
+  transform:translateX(-50%);
+  min-width:58px;
+  padding:4px 10px;
+  border-radius:14px;
+  background:#fff;
+  color:#ff6a1a;
+  border:3px solid #ffb52e;
+  font-size:32px;
+  font-weight:1000;
+  line-height:1;
+  text-align:center;
+  box-shadow:0 5px 0 rgba(0,0,0,.15);
+}
+
+.nursery-platform::before{
+  content:"";
+  position:absolute;
+  width:10px;
+  height:42px;
+  left:22px;
+  top:20px;
+  background:#9b5b09;
+  border-radius:5px;
+  box-shadow:145px 0 0 #9b5b09;
+}
+
+.nursery-fatout{
+  position:absolute;
+  width:76px;
+  height:112px;
+  left:calc(50% - 38px);
+  bottom:82px;
+  z-index:5;
+  transform:scale(.62);
+  transform-origin:bottom center;
+  filter:drop-shadow(0 7px 4px rgba(0,0,0,.3));
+}
+
+.nursery-next-btn{
+  margin-top:9px;
+  width:min(100%,280px);
+}
+
+.nursery-after-learning-buttons{display:flex;flex-direction:column;gap:12px;width:100%;max-width:300px;margin:22px auto 0;}
+
+.nursery-game-mode #question-box{min-height:100px;height:auto;padding:7px 8px;top:8px;width:calc(100% - 103px);max-width:225px;border-radius:15px;}
+.nursery-game-mode .question-title{font-size:10px;margin-bottom:2px;}
+.nursery-game-mode #question-text{font-size:22px;line-height:1.05;}
+.nursery-game-equation{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px;font-size:clamp(20px,5vw,29px);line-height:1;}
+.nursery-game-group{min-height:0;max-width:100%;word-break:break-all;text-align:center;}
+.nursery-game-op{font-size:22px;font-weight:900;}
+.nursery-game-question{font-size:27px;font-weight:900;}
+
+@media(max-height:700px){
+  .nursery-scene{height:330px;}
+  .nursery-platform{bottom:58px;}
+  .nursery-fatout{bottom:72px;}
+  .nursery-number-card{top:18px;}
+}
+
+/* ===== أزرار مراحل قاعدة الخمسة فقط ===== */
+
+.five-rules-grid{
+  width:100%;
+  max-width:260px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-top:8px;
+}
+
+.five-rule-btn{
+  width:100%;
+  height:78px;
+  border:none;
+  border-radius:14px;
+  color:#fff;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  box-shadow:
+    0 4px 0 rgba(0,0,0,.25),
+    0 0 10px rgba(255,255,255,.12);
+  transition:.15s;
+  padding:6px;
+}
+
+.five-rule-btn span{
+  font-size:23px;
+  line-height:1;
+}
+
+.five-rule-btn strong{
+  font-size:13px;
+  line-height:1.2;
+  text-align:center;
+}
+
+.five-rule-btn:active{
+  transform:translateY(4px);
+}
+
+.rule-basic{
+  background:linear-gradient(135deg,#ffb51b,#ff6416);
+}
+
+.rule-two-three{
+  background:linear-gradient(135deg,#25c7ff,#1766ff);
+}
+
+.rule-one-four{
+  background:linear-gradient(135deg,#b16cff,#6735d8);
+}
+
+.rule-mixed{
+  background:linear-gradient(135deg,#38dc76,#079d55);
+}
+
+/* ================= GAME ================= */
+
+#game-screen{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 15%,#1784dc 0%,#0870c7 25%,#0753a4 55%,#063b7b 100%);
+}
+
+#timer-clock{
+  position:absolute;
+  top:17px;
+  left:14px;
+  z-index:80;
+  min-width:72px;
+  height:43px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  padding:0 10px;
+  border-radius:15px;
+  background:linear-gradient(135deg,#174e91,#092e60);
+  border:3px solid #50e7ff;
+  font-size:18px;
+  font-weight:900;
+}
+
+#timer-clock.danger{
+  border-color:#ff5555;
+  color:#ff7070;
+  animation:dangerPulse .5s infinite alternate;
+}
+
+@keyframes dangerPulse{
+  from{transform:scale(1);}
+  to{transform:scale(1.08);}
+}
+
+/* ================= السؤال ================= */
+
+#question-box{
+  position:absolute;
+  top:17px;
+  right:14px;
+  z-index:80;
+  width:calc(100% - 103px);
+  max-width:255px;
+  min-height:105px;
+  padding:10px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  border-radius:19px;
+  background:linear-gradient(145deg,#0b5eaa,#083c79);
+  border:3px solid #55e9ff;
+  box-shadow:
+    0 7px 15px rgba(0,0,0,.3),
+    0 0 18px rgba(55,221,255,.25);
+}
+
+.question-title{
+  font-size:12px;
+  font-weight:bold;
+  color:#9df2ff;
+  margin-bottom:5px;
+}
+
+#question-text{
+  font-size:30px;
+  font-weight:1000;
+  direction:ltr;
+}
+
+#mental-vertical{
+  display:none;
+  flex-direction:column;
+  align-items:center;
+}
+
+#mental-vertical.visible{
+  display:flex;
+}
+
+#vertical-numbers{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  direction:ltr;
+  font-size:28px;
+  line-height:1.05;
+  font-weight:1000;
+}
+
+.vertical-number{
+  min-width:55px;
+  text-align:right;
+}
+
+.vertical-line{
+  width:62px;
+  height:3px;
+  background:#fff;
+  margin:4px 0;
+}
+
+.vertical-answer{
+  font-size:27px;
+  font-weight:1000;
+}
+
+/* ===== الحساب الذهني ===== */
+
+#game-screen.mental-mode #question-box{
+  width:92px;
+  max-width:92px;
+  min-height:92px;
+  height:auto;
+  top:12px;
+  right:8px;
+  padding:6px 4px;
+  border-radius:14px;
+}
+
+#game-screen.mental-mode .question-title{
+  display:none;
+}
+
+#game-screen.mental-mode #mental-vertical{
+  display:flex;
+}
+
+#game-screen.mental-mode #vertical-numbers{
+  font-size:21px;
+  line-height:1;
+  min-width:50px;
+}
+
+#game-screen.mental-mode .vertical-number{
+  min-width:50px;
+  text-align:right;
+}
+
+#game-screen.mental-mode .vertical-line{
+  width:48px;
+  height:2px;
+  margin:3px 0;
+}
+
+#game-screen.mental-mode .vertical-answer{
+  font-size:20px;
+}
+
+#game-screen.mental-mode #question-text{
+  font-size:21px;
+  line-height:1.1;
+  text-align:center;
+  white-space:nowrap;
+}
+
+/* ================= BACKGROUND ================= */
+
+.sun{
+  position:absolute;
+  top:35px;
+  right:12px;
+  z-index:1;
+  font-size:52px;
+  filter:drop-shadow(0 0 12px #ffd84d);
+}
+
+.cloud{
+  position:absolute;
+  z-index:2;
+  opacity:.8;
+  font-size:48px;
+}
+
+.cloud-1{top:18px;left:100px;}
+.cloud-2{top:270px;right:15px;font-size:38px;}
+.cloud-3{top:390px;left:12px;font-size:34px;}
+
+.mountain{
+  position:absolute;
+  bottom:0;
+  z-index:1;
+  width:150px;
+  height:230px;
+  background:linear-gradient(135deg,#17569c,#0a3976);
+  clip-path:polygon(
+    0 100%,35% 40%,50% 15%,65% 40%,100% 100%
+  );
+  opacity:.8;
+}
+
+.mountain-left{left:-55px;}
+.mountain-right{right:-55px;}
+
+/* ================= GAME STAGE ================= */
+
+#game-stage{
+  position:absolute;
+  top:145px;
+  left:0;
+  right:0;
+  bottom:0;
+  overflow:hidden;
+  z-index:5;
+}
+
+#game-stage::before{
+  content:"";
+  position:absolute;
+  left:-10px;
+  right:-10px;
+  bottom:0;
+  height:62px;
+  z-index:4;
+  background:
+    linear-gradient(
+      180deg,
+      #7fe52d 0 16%,
+      #36a51d 17% 34%,
+      #71472e 35% 100%
+    );
+  border-top:7px solid #a8ef45;
+  border-radius:20px 20px 0 0;
+}
+
+#tower-world{
+  position:absolute;
+  left:0;
+  bottom:0;
+  width:100%;
+  height:5200px;
+  z-index:8;
+  transform:translateY(0);
+  transition:transform .55s ease;
+}
+
+/* ================= PLATFORMS ================= */
+
+.step{
+  position:absolute;
+  width:95px;
+  height:47px;
+  z-index:20;
+  border:3px solid #5b3928;
+  border-radius:16px;
+  color:#111;
+  font-size:20px;
+  font-weight:1000;
+  cursor:pointer;
+  box-shadow:
+    0 7px 0 #4b3025,
+    0 0 12px rgba(255,255,255,.18);
+  transition:
+    transform .15s,
+    opacity .3s,
+    filter .15s;
+}
+
+.step::before{
+  content:"";
+  position:absolute;
+  left:-4px;
+  right:-4px;
+  top:-8px;
+  height:13px;
+  border-radius:12px;
+  background:linear-gradient(180deg,#c1f35a,#52c923);
+  border:2px solid #278b25;
+}
+
+.step::after{
+  content:"";
+  position:absolute;
+  left:5px;
+  right:5px;
+  bottom:-9px;
+  height:11px;
+  border-radius:0 0 10px 10px;
+  background:linear-gradient(90deg,#79513b,#a77552,#68432f);
+}
+
+.step:hover{
+  filter:brightness(1.15);
+}
+
+.step:active{
+  transform:scale(.93);
+}
+
+/* الإجابة الصحيحة بعد الخطأ */
+.step.correct-answer-hint{
+  animation:correctAnswerBlink .55s ease-in-out infinite;
+  filter:brightness(1.35) drop-shadow(0 0 12px #fff36a) drop-shadow(0 0 24px #ffd400);
+  z-index:35;
+}
+
+@keyframes correctAnswerBlink{
+  0%,100%{
+    filter:brightness(1.15) drop-shadow(0 0 6px #fff36a) drop-shadow(0 0 12px #ffd400);
+  }
+  50%{
+    filter:brightness(2) drop-shadow(0 0 18px #fff36a) drop-shadow(0 0 32px #ffd400);
+  }
+}
+
+.current-platform{
+  background:linear-gradient(180deg,#34db75,#099b51);
+  cursor:default;
+}
+
+.new-platform{
+  animation:platformAppear .35s ease-out;
+}
+
+@keyframes platformAppear{
+  from{
+    opacity:0;
+    transform:translateY(-25px) scale(.8);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+.fading-platform{
+  opacity:0;
+  transform:translateY(30px) scale(.8);
+  pointer-events:none;
+}
+
+/* ================= FATOUT ================= */
+
+#fatout{
+  position:absolute;
+  width:76px;
+  height:112px;
+  left:calc(50% - 38px);
+  bottom:62px;
+  z-index:40;
+  transform:scale(.55);
+  transform-origin:bottom center;
+  transition:left .45s ease,bottom .45s ease;
+  filter:drop-shadow(0 7px 4px rgba(0,0,0,.35));
+}
+
+.f-shadow{
+  position:absolute;
+  width:52px;
+  height:10px;
+  left:12px;
+  bottom:0;
+  background:rgba(0,0,0,.28);
+  border-radius:50%;
+  animation:fatoutShadow .55s ease-in-out infinite alternate;
+}
+
+@keyframes fatoutShadow{
+  from{transform:scale(.9);opacity:.35;}
+  to{transform:scale(1.05);opacity:.2;}
+}
+
+.f-hair{
+  position:absolute;
+  left:18px;
+  top:0;
+  width:40px;
+  height:27px;
+  z-index:4;
+}
+
+.f-hair span{
+  position:absolute;
+  width:18px;
+  height:24px;
+  background:#382216;
+  border-radius:70% 30% 50% 50%;
+  transform-origin:bottom center;
+}
+
+.f-hair span:nth-child(1){left:0;transform:rotate(-25deg);}
+.f-hair span:nth-child(2){left:11px;top:-5px;}
+.f-hair span:nth-child(3){right:0;transform:rotate(25deg);}
+
+.f-head{
+  position:absolute;
+  left:14px;
+  top:15px;
+  width:48px;
+  height:49px;
+  background:#ffd09a;
+  border:3px solid #63391f;
+  border-radius:48% 48% 45% 45%;
+  z-index:3;
+}
+
+.f-ear{
+  position:absolute;
+  top:15px;
+  width:9px;
+  height:17px;
+  background:#ffc38c;
+  border:2px solid #63391f;
+  border-radius:50%;
+}
+
+.f-ear-left{left:-9px;}
+.f-ear-right{right:-9px;}
+
+.f-eye{
+  position:absolute;
+  top:17px;
+  width:7px;
+  height:10px;
+  background:#172238;
+  border-radius:50%;
+  animation:blink 3.5s infinite;
+}
+
+.f-eye-left{left:10px;}
+.f-eye-right{right:10px;}
+
+@keyframes blink{
+  0%,94%,100%{transform:scaleY(1);}
+  96%{transform:scaleY(.1);}
+}
+
+.f-nose{
+  position:absolute;
+  left:20px;
+  top:27px;
+  width:8px;
+  height:7px;
+  background:#e9965d;
+  border-radius:50%;
+}
+
+.f-mouth{
+  position:absolute;
+  left:15px;
+  top:35px;
+  width:17px;
+  height:8px;
+  background:#6a291d;
+  border-radius:0 0 12px 12px;
+}
+
+.f-mouth span{
+  position:absolute;
+  left:3px;
+  bottom:-1px;
+  width:11px;
+  height:4px;
+  background:#ff8f91;
+  border-radius:8px;
+}
+
+.f-neck{
+  position:absolute;
+  left:31px;
+  top:59px;
+  width:15px;
+  height:13px;
+  background:#efad77;
+}
+
+.f-body{
+  position:absolute;
+  left:14px;
+  top:67px;
+  width:48px;
+  height:34px;
+  background:#ff812e;
+  border:3px solid #63391f;
+  border-radius:15px 15px 9px 9px;
+  z-index:2;
+}
+
+.f-shirt{
+  position:absolute;
+  left:9px;
+  top:3px;
+  width:24px;
+  height:21px;
+  background:#22b9ff;
+  border-radius:8px;
+}
+
+.f-arm{
+  position:absolute;
+  top:3px;
+  width:9px;
+  height:27px;
+  background:#ffd09a;
+  border:2px solid #63391f;
+  border-radius:8px;
+}
+
+.f-arm-left{
+  left:-8px;
+  transform:rotate(13deg);
+}
+
+.f-arm-right{
+  right:-8px;
+  transform:rotate(-13deg);
+}
+
+.f-leg{
+  position:absolute;
+  top:96px;
+  width:12px;
+  height:18px;
+  background:#3152a2;
+  border:2px solid #4a2e21;
+  border-radius:7px;
+}
+
+.f-leg-left{left:21px;}
+.f-leg-right{right:21px;}
+
+.f-shoe{
+  position:absolute;
+  top:107px;
+  width:21px;
+  height:9px;
+  background:#592f1d;
+  border-radius:8px;
+}
+
+.f-shoe-left{left:13px;}
+.f-shoe-right{right:13px;}
+
+#fatout.jumping{
+  animation:fatoutJump .45s ease-out;
+}
+
+@keyframes fatoutJump{
+  0%{transform:translateY(0) scale(.55);}
+  35%{transform:translateY(-30px) scale(.57);}
+  70%{transform:translateY(-8px) scale(.55);}
+  100%{transform:translateY(0) scale(.55);}
+}
+
+#fatout.falling{
+  animation:fatoutFall .9s cubic-bezier(.35,.05,.7,1) forwards;
+}
+
+@keyframes fatoutFall{
+  0%{
+    transform:translateY(0) rotate(0deg) scale(.55);
+    opacity:1;
+  }
+  18%{
+    transform:translateY(18px) rotate(-2deg) scale(.55);
+    opacity:1;
+  }
+  55%{
+    transform:translateY(150px) rotate(2deg) scale(.55);
+    opacity:1;
+  }
+  100%{
+    transform:translateY(470px) rotate(4deg) scale(.55);
+    opacity:0;
+  }
+}
+
+/* ================= BUTTONS ================= */
+
+.exit-btn{
+  position:absolute;
+  right:14px;
+  bottom:14px;
+  z-index:90;
+  border:none;
+  border-radius:12px;
+  padding:9px 14px;
+  background:rgba(0,0,0,.35);
+  color:#fff;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
+  border:1px solid rgba(255,255,255,.2);
+}
+
+/* ================= RESULTS ================= */
+
+.overlay{
+  position:absolute;
+  inset:0;
+  z-index:100;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  background:rgba(0,20,50,.72);
+  backdrop-filter:blur(5px);
+}
+
+.result-card{
+  width:100%;
+  max-width:310px;
+  padding:22px;
+  text-align:center;
+  border-radius:24px;
+  background:linear-gradient(145deg,#0c5eaa,#092b5d);
+  border:3px solid #55e9ff;
+  box-shadow:0 15px 30px rgba(0,0,0,.4);
+}
+
+.success-icon,
+#result-icon{
+  font-size:55px;
+}
+
+.result-card h2{
+  margin:10px 0;
+}
+
+#final-score,
+#level-score,
+#mental-level-score{
+  color:#ffd83d;
+  font-size:20px;
+  font-weight:bold;
+}
+
+.result-btn{
+  width:100%;
+  border:none;
+  border-radius:14px;
+  padding:12px;
+  margin-top:9px;
+  color:#fff;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.retry-btn{
+  background:linear-gradient(135deg,#27caff,#236cff);
+}
+
+.home-btn{
+  background:linear-gradient(135deg,#596579,#303b4e);
+}
+
+@media(max-height:680px){
+
+  #game-container{
+    height:min(92dvh,700px);
+    max-height:calc(100dvh - 16px);
+    transform:none;
+  }
+
+  #game-stage{
+    top:140px;
+  }
+
+  .step{
+    width:82px;
+    height:42px;
+  }
+
+  #fatout{
+    transform:scale(.55);
+    transform-origin:bottom center;
+  }
+
+  #game-screen.mental-mode #question-box{
+    width:86px;
+    max-width:86px;
+    min-height:86px;
+    right:7px;
+    top:8px;
+  }
+
+  #game-screen.mental-mode #vertical-numbers{
+    font-size:19px;
+  }
+
+  #game-screen.mental-mode .vertical-line{
+    width:44px;
+  }
+
+  #game-screen.mental-mode .vertical-answer{
+    font-size:18px;
+  }
+
+  #game-screen.mental-mode #question-text{
+    font-size:19px;
+  }
+
+  .five-rules-grid{
+    max-width:245px;
+    gap:7px;
+  }
+
+  .five-rule-btn{
+    height:71px;
+  }
+
+  .five-rule-btn span{
+    font-size:20px;
+  }
+
+  .five-rule-btn strong{
+    font-size:12px;
+  }
+
+}
+
+/* ===== OWNER ===== */
+.owner-credit{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:10px;
+  text-align:center;
+  color:rgba(255,255,255,.72);
+  font-size:12px;
+  font-weight:bold;
+  direction:ltr;
+  pointer-events:none;
+}
+
+
+/* ================= شاشة البداية الجديدة ================= */
+#splash-screen{
+  position:absolute;
+  inset:0;
+  z-index:200;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  background:
+    radial-gradient(circle at 50% 28%,rgba(42,174,255,.42) 0,rgba(42,174,255,0) 34%),
+    radial-gradient(circle at 15% 85%,rgba(0,225,255,.18) 0,transparent 28%),
+    radial-gradient(circle at 90% 70%,rgba(111,76,255,.22) 0,transparent 30%),
+    linear-gradient(180deg,#061d50 0%,#073b78 48%,#03142f 100%);
+}
+
+#splash-screen::before{
+  content:"";
+  position:absolute;
+  width:230px;
+  height:230px;
+  border:1px solid rgba(255,255,255,.11);
+  border-radius:50%;
+  top:22%;
+  left:50%;
+  transform:translateX(-50%);
+  box-shadow:0 0 60px rgba(64,205,255,.13);
+}
+
+.intro-content{
+  position:relative;
+  z-index:5;
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:18px 16px 20px;
+}
+
+.intro-stars{
+  position:absolute;
+  inset:0;
+  opacity:.9;
+  background-image:
+    radial-gradient(circle,rgba(255,255,255,.9) 0 1px,transparent 1.5px),
+    radial-gradient(circle,rgba(104,220,255,.8) 0 1px,transparent 1.5px),
+    radial-gradient(circle,rgba(255,255,255,.55) 0 1.2px,transparent 1.8px);
+  background-size:55px 55px,83px 83px,127px 127px;
+  background-position:10px 14px,28px 41px,4px 72px;
+  animation:introStarsMove 10s linear infinite;
+}
+
+@keyframes introStarsMove{
+  from{transform:translateY(0);}
+  to{transform:translateY(55px);}
+}
+
+.intro-glow{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(24px);
+  pointer-events:none;
+}
+.intro-glow-one{width:105px;height:105px;background:rgba(0,214,255,.18);top:20%;left:8%;animation:introGlow 3s ease-in-out infinite;}
+.intro-glow-two{width:90px;height:90px;background:rgba(255,211,47,.13);top:32%;right:8%;animation:introGlow 3.7s ease-in-out .5s infinite;}
+@keyframes introGlow{50%{transform:scale(1.25);opacity:.55;}100%{transform:scale(1);opacity:1;}}
+
+.intro-badge{
+  padding:7px 15px;
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:999px;
+  background:rgba(255,255,255,.09);
+  box-shadow:0 8px 25px rgba(0,0,0,.16);
+  color:#dff9ff;
+  font-size:13px;
+  font-weight:900;
+  backdrop-filter:blur(8px);
+  animation:introBadgeIn .55s ease-out both;
+}
+@keyframes introBadgeIn{from{opacity:0;transform:translateY(-12px) scale(.9)}to{opacity:1;transform:none}}
+
+#splash-screen .splash-title{
+  position:relative;
+  top:auto;
+  left:auto;
+  right:auto;
+  margin:10px 0 0;
+  font-size:clamp(43px,14vw,64px);
+  line-height:1;
+  font-weight:1000;
+  color:#ffd52f;
+  text-shadow:0 6px 0 #c95b00,0 0 25px rgba(255,213,47,.42);
+  opacity:1;
+  transform:none;
+  animation:introTitleIn .65s cubic-bezier(.2,1.3,.3,1) .12s both;
+  z-index:40;
+}
+@keyframes introTitleIn{from{opacity:0;transform:translateY(15px) scale(.8)}to{opacity:1;transform:none}}
+
+.intro-subtitle{
+  margin:7px 0 3px;
+  color:#e7faff;
+  font-size:15px;
+  font-weight:800;
+  letter-spacing:.2px;
+  opacity:.95;
+}
+
+#splash-screen .splash-fatout{
+  position:relative;
+  width:84px;
+  height:123px;
+  margin:8px 0 0;
+  filter:drop-shadow(0 13px 8px rgba(0,0,0,.35));
+  transform-origin:center bottom;
+  transform-style:preserve-3d;
+  animation:introFatoutBounce 2.2s ease-in-out infinite;
+  z-index:10;
+}
+@keyframes introFatoutBounce{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-9px) rotate(1deg)}}
+
+#splash-screen .splash-fatout .f-arm-left{left:1px;top:-2px;transform:rotate(-38deg);transform-origin:bottom center;animation:none;}
+#splash-screen .splash-fatout .f-arm-right{right:1px;top:-2px;transform:rotate(38deg);transform-origin:bottom center;animation:none;}
+#splash-screen .splash-fatout .f-leg-left,#splash-screen .splash-fatout .f-leg-right{animation:none;}
+
+#splash-screen .splash-cape{
+  animation:introCape 1.8s ease-in-out infinite;
+}
+@keyframes introCape{50%{transform:rotate(14deg) scaleX(1.08)}}
+
+.intro-platform{
+  width:145px;
+  height:17px;
+  margin-top:-2px;
+  border-radius:50%;
+  background:linear-gradient(180deg,#48e9ff,#0d9ed0);
+  box-shadow:0 5px 0 #056489,0 0 30px rgba(43,221,255,.45);
+  animation:introPlatform 2.2s ease-in-out infinite;
+}
+@keyframes introPlatform{50%{transform:scaleX(.9);box-shadow:0 5px 0 #056489,0 0 42px rgba(43,221,255,.65)}}
+
+#splash-screen .splash-start-btn{
+  position:relative;
+  bottom:auto;
+  min-width:240px;
+  margin-top:18px;
+  padding:14px 28px;
+  border:3px solid rgba(255,255,255,.95);
+  border-radius:20px;
+  background:linear-gradient(135deg,#ffd52f,#ff8a00);
+  color:#17305e;
+  font-size:22px;
+  font-weight:1000;
+  box-shadow:0 7px 0 #b95c00,0 0 25px rgba(255,213,47,.4);
+  cursor:pointer;
+  opacity:1;
+  transform:none;
+  animation:introButtonPulse 1.8s ease-in-out 1s infinite;
+  z-index:45;
+}
+#splash-screen .splash-start-btn:active{transform:translateY(5px) scale(.97);box-shadow:0 2px 0 #b95c00;}
+@keyframes introButtonPulse{50%{transform:translateY(-2px) scale(1.025);box-shadow:0 9px 0 #b95c00,0 0 34px rgba(255,213,47,.58)}}
+
+#splash-screen .splash-credit{
+  position:relative;
+  bottom:auto;
+  margin-top:12px;
+  color:rgba(255,255,255,.72);
+  font-size:12px;
+  font-weight:800;
+  direction:ltr;
+  opacity:1;
+  animation:none;
+  z-index:45;
+}
+
+@media(max-height:650px){
+  .intro-content{padding-top:8px;padding-bottom:10px;}
+  .intro-badge{font-size:11px;padding:5px 12px;}
+  #splash-screen .splash-title{font-size:43px;}
+  #splash-screen .splash-fatout{transform:scale(.86);margin:-2px 0 -8px;}
+  .intro-platform{margin-top:-5px;}
+  #splash-screen .splash-start-btn{margin-top:10px;padding:11px 24px;font-size:19px;min-width:215px;}
+  #splash-screen .splash-credit{margin-top:7px;}
+}
+</style>
+
+<style>
+/* سقوط فطوط: سقوط طبيعي لتحت بدون تكبير أو شفافية */
+#fatout.falling {
+  animation: fatoutStraightFall 1.2s ease-in forwards !important;
+  transform-origin: center bottom;
+}
+@keyframes fatoutStraightFall {
+  0%   { transform: translateY(0) scale(.55); opacity:1; }
+  100% { transform: translateY(320px) scale(.55); opacity:1; }
+}
+
+/* ================= الرياضيات العامة ================= */
+
+.general-level-grid{
+  width:100%;
+  max-width:300px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:8px;
+}
+
+.general-level-card{
+  width:100%;
+  border-radius:18px;
+  padding:9px;
+  background:rgba(255,255,255,.10);
+  box-shadow:0 5px 0 rgba(0,0,0,.20);
+}
+
+.general-level-title{
+  color:#fff;
+  font-size:18px;
+  font-weight:900;
+  margin-bottom:2px;
+}
+
+.general-level-age{
+  color:#dff7ff;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:7px;
+}
+
+.general-difficulty-row{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+}
+
+.general-difficulty-btn{
+  border:none;
+  border-radius:12px;
+  padding:10px 4px;
+  color:#fff;
+  font-weight:900;
+  font-size:13px;
+  cursor:pointer;
+  box-shadow:0 4px 0 rgba(0,0,0,.25);
+}
+
+.general-difficulty-btn:active{
+  transform:translateY(3px);
+  box-shadow:0 1px 0 rgba(0,0,0,.25);
+}
+
+.general-easy{background:linear-gradient(135deg,#38dc76,#079d55);}
+.general-medium{background:linear-gradient(135deg,#ffb51b,#ff6416);}
+.general-hard{background:linear-gradient(135deg,#ff5b6e,#d92345);}
+
+@media(max-height:680px){
+  .general-level-grid{gap:7px;max-width:280px;}
+  .general-level-card{padding:7px;}
+  .general-level-title{font-size:16px;}
+  .general-level-age{font-size:12px;}
+  .general-difficulty-btn{padding:8px 3px;font-size:12px;}
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="game-container">
+
+<section id="splash-screen">
+  <div class="intro-stars" aria-hidden="true"></div>
+  <div class="intro-glow intro-glow-one" aria-hidden="true"></div>
+  <div class="intro-glow intro-glow-two" aria-hidden="true"></div>
+
+  <div class="intro-content">
+    <div class="intro-badge">⭐ مغامرة جديدة</div>
+
+    <h1 class="splash-title">سوبر فطوط</h1>
+    <p class="intro-subtitle"> 🏆</p>
+
+    <div class="splash-fatout" aria-label="فطوط بطل خارق">
+      <div class="splash-cape"></div>
+      <div class="f-hair"><span></span><span></span><span></span></div>
+      <div class="f-head">
+        <div class="f-ear f-ear-left"></div>
+        <div class="f-ear f-ear-right"></div>
+        <div class="f-eye f-eye-left"></div>
+        <div class="f-eye f-eye-right"></div>
+        <div class="f-nose"></div>
+        <div class="f-mouth"><span></span></div>
+      </div>
+      <div class="f-neck"></div>
+      <div class="f-body">
+        <div class="f-shirt"></div>
+        <div class="f-arm f-arm-left"></div>
+        <div class="f-arm f-arm-right"></div>
+      </div>
+      <div class="f-leg f-leg-left"></div>
+      <div class="f-leg f-leg-right"></div>
+      <div class="f-shoe f-shoe-left"></div>
+      <div class="f-shoe f-shoe-right"></div>
+    </div>
+
+    <div class="intro-platform" aria-hidden="true"></div>
+
+    <button id="splash-start-btn" class="splash-start-btn">🎮 ابدأ المغامرة</button>
+    <div class="splash-credit">© 2026 Sara Ismail</div>
+  </div>
+</section>
+
+<section id="mode-screen" class="screen hidden">
+  <div class="brand">
+    <div class="brand-title">سوبر فطوط</div>
+  </div>
+
+  <h2>اختار طريقك يا بطل 💪</h2>
+
+  <button class="menu-btn green-btn" id="btn-nursery">
+    🧸 عالم الروضة
+    <small>مغامرة الأرقام الصغيرة</small>
+  </button>
+
+  <button class="menu-btn orange-btn" id="btn-mental">
+    🧠 الحساب الذهني
+  </button>
+
+  <button class="menu-btn blue-btn" id="btn-general">
+    📚 الرياضيات العامة
+  </button>
+
+  <div class="mascot-main">👦🏻</div>
+<div class="owner-credit">© 2026 Sara Ismail</div>
+</section>
+
+<section id="mental-screen" class="screen hidden">
+
+  <button class="back-btn" id="mental-back">
+    🏠 الرئيسية
+  </button>
+
+  <h2>الحساب الذهني 🧠</h2>
+
+  <p class="screen-subtitle">اختار القسم يا بطل</p>
+
+  <button class="menu-btn orange-btn" id="btn-section-one">
+    🔢 قاعدة الأربعة
+  </button>
+
+  <button class="menu-btn purple-btn" id="btn-section-two">
+    ⭐ قاعدة الخمسة
+  </button>
+
+</section>
+
+<section id="mental-level-screen" class="screen hidden">
+
+  <button class="back-btn" id="mental-level-back">
+    🏠 رجوع
+  </button>
+
+  <h2>قاعدة الأربعة 🔢</h2>
+
+  <p class="screen-subtitle">اختار المستوى</p>
+
+  <button class="menu-btn green-btn mental-level-btn" data-level="1">
+    🚀 المستوى 1
+    <small>رقمين رأسيًا</small>
+  </button>
+
+  <button class="menu-btn blue-btn mental-level-btn" data-level="2">
+    🚀 المستوى 2
+    <small>3 أرقام رأسيًا</small>
+  </button>
+
+  <button class="menu-btn purple-btn mental-level-btn" data-level="3">
+    🚀 المستوى 3
+    <small>4 أو 5 أرقام رأسيًا</small>
+  </button>
+
+</section>
+
+<!-- ===== قاعدة الخمسة ===== -->
+
+<section id="five-rules-screen" class="screen hidden">
+  <button class="back-btn" id="five-rules-back">🏠 رجوع</button>
+  <h2>قاعدة الخمسة ⭐</h2>
+  <p class="screen-subtitle">اختار القاعدة يا بطل</p>
+  <div class="five-rules-grid">
+    <button class="five-rule-btn rule-basic" data-five-rule="1">
+      <span>⭐</span><strong>القاعدة الأساسية</strong>
+    </button>
+    <button class="five-rule-btn rule-one-four" data-five-rule="2">
+      <span>1️⃣4️⃣</span><strong>قاعدة الواحد والأربعة</strong>
+    </button>
+    <button class="five-rule-btn rule-two-three" data-five-rule="3">
+      <span>2️⃣3️⃣</span><strong>قاعدة الثلاثة والاثنين</strong>
+    </button>
+    <button class="five-rule-btn rule-mixed" data-five-stage="4">
+      <span>🔥</span><strong>تحدي القواعد المركبة</strong>
+    </button>
+  </div>
+</section>
+
+<!-- ===== مستويات قواعد الخمسة ===== -->
+<section id="five-level-screen" class="screen hidden">
+  <button class="back-btn" id="five-level-back">🏠 رجوع</button>
+  <h2 id="five-level-title">قاعدة الخمسة ⭐</h2>
+  <p class="screen-subtitle">اختار المستوى يا بطل</p>
+
+  <button class="menu-btn green-btn five-level-btn" data-five-level="1">
+    🚀 المستوى 1<small>رقمين رأسيًا</small>
+  </button>
+  <button class="menu-btn blue-btn five-level-btn" data-five-level="2">
+    🚀 المستوى 2<small>3 أرقام رأسيًا</small>
+  </button>
+  <button class="menu-btn purple-btn five-level-btn" data-five-level="3">
+    🚀 المستوى 3<small>4 أو 5 أرقام رأسيًا</small>
+  </button>
+</section>
+
+<section id="general-sections-screen" class="screen hidden">
+
+  <button class="back-btn" id="general-back">
+    🏠 الرئيسية
+  </button>
+
+  <h2>الرياضيات العامة 📚</h2>
+
+  <div class="general-level-grid">
+
+    <div class="general-level-card">
+      <div class="general-level-title">🟢 المستوى الأول</div>
+      <div class="general-level-age">أقل من 10 سنين</div>
+      <div class="general-difficulty-row">
+        <button class="general-difficulty-btn general-easy"
+                data-general-level="1" data-general-difficulty="easy">سهل</button>
+        <button class="general-difficulty-btn general-medium"
+                data-general-level="1" data-general-difficulty="medium">متوسط</button>
+        <button class="general-difficulty-btn general-hard"
+                data-general-level="1" data-general-difficulty="hard">صعب</button>
+      </div>
+    </div>
+
+    <div class="general-level-card">
+      <div class="general-level-title">🔵 المستوى الثاني</div>
+      <div class="general-level-age">من 11 سنة فأكثر</div>
+      <div class="general-difficulty-row">
+        <button class="general-difficulty-btn general-easy"
+                data-general-level="2" data-general-difficulty="easy">سهل</button>
+        <button class="general-difficulty-btn general-medium"
+                data-general-level="2" data-general-difficulty="medium">متوسط</button>
+        <button class="general-difficulty-btn general-hard"
+                data-general-level="2" data-general-difficulty="hard">صعب</button>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<section id="age-screen" class="screen hidden">
+
+  <button class="back-btn" id="age-back">
+    🏠 الرئيسية
+  </button>
+
+  <h2>عالم الروضة 🧸</h2>
+
+  <p class="screen-subtitle">اختار المغامرة يا بطل 🌈</p>
+
+  <div class="nursery-sections-grid">
+    <button class="nursery-section-btn" id="btn-learn-numbers">
+      <span>🔢</span>
+      <strong>تعلم الأرقام ١ - ١٠</strong>
+    </button>
+
+    <button class="nursery-section-btn" id="btn-learn-numbers-11-20">
+      <span>🔢</span>
+      <strong>تعلم الأرقام ١١ - ٢٠</strong>
+    </button>
+  </div>
+
+  <div class="mascot-main">🧸</div>
+
+</section>
+
+<section id="nursery-lesson-screen" class="screen hidden">
+
+  <div class="nursery-lesson-top">
+    <button class="back-btn" id="nursery-lesson-back">🏠 رجوع</button>
+    <div class="nursery-counter" id="nursery-counter">١ / ١٠</div>
+  </div>
+
+  <h2 class="nursery-lesson-title">تعلم الأرقام 🔢</h2>
+  <p class="nursery-lesson-subtitle">عدّ الحاجات مع فطوط 👦🏻</p>
+
+  <div class="nursery-scene">
+    <div class="nursery-cloud one">☁️</div>
+    <div class="nursery-cloud two">☁️</div>
+
+    <div class="nursery-number-card">
+      <span class="nursery-big-number" id="nursery-big-number">١</span>
+      <div class="nursery-objects" id="nursery-objects">🍎</div>
+    </div>
+
+    <div class="nursery-fatout">
+      <div class="f-shadow"></div>
+      <div class="f-hair"><span></span><span></span><span></span></div>
+      <div class="f-head">
+        <div class="f-ear f-ear-left"></div>
+        <div class="f-ear f-ear-right"></div>
+        <div class="f-eye f-eye-left"></div>
+        <div class="f-eye f-eye-right"></div>
+        <div class="f-nose"></div>
+        <div class="f-mouth"><span></span></div>
+      </div>
+      <div class="f-neck"></div>
+      <div class="f-body">
+        <div class="f-shirt"></div>
+        <div class="f-arm f-arm-left"></div>
+        <div class="f-arm f-arm-right"></div>
+      </div>
+      <div class="f-leg f-leg-left"></div>
+      <div class="f-leg f-leg-right"></div>
+    </div>
+
+    <div class="nursery-platform"><span id="nursery-platform-number">١</span></div>
+  </div>
+
+  <button class="menu-btn green-btn nursery-next-btn" id="nursery-next-btn">التالي ➜</button>
+
+</section>
+
+<section id="nursery-after-learning-screen" class="screen hidden">
+  <button class="back-btn" id="nursery-after-learning-back">🏠 رجوع</button>
+  <h2>برافو يا بطل! 🎉</h2>
+  <p class="screen-subtitle">خلصت تعلم الأرقام 👏 جاهز نلعب؟</p>
+  <div class="nursery-after-learning-buttons">
+    <button class="menu-btn green-btn" id="nursery-start-game">🎮 ابدأ اللعبة</button>
+    <button class="menu-btn blue-btn" id="nursery-return-sections">↩️ رجوع</button>
+  </div>
+  <div class="mascot-main">🧸</div>
+</section>
+
+<section id="game-screen" class="hidden">
+
+  <div id="timer-clock">
+    ⏱️
+    <span id="timer-value">15</span>
+  </div>
+
+  <div id="question-box">
+
+    <div class="question-title">
+      اختار الإجابة الصحيحة 🧠
+    </div>
+
+    <div id="question-text">
+      2 + 2
+    </div>
+
+    <div id="mental-vertical">
+      <div id="vertical-numbers"></div>
+      <div class="vertical-line"></div>
+      <div class="vertical-answer">؟</div>
+    </div>
+
+  </div>
+
+  <div class="sun">☀️</div>
+
+  <div class="cloud cloud-1">☁️</div>
+  <div class="cloud cloud-2">☁️</div>
+  <div class="cloud cloud-3">☁️</div>
+
+  <div class="mountain mountain-left"></div>
+  <div class="mountain mountain-right"></div>
+
+  <div id="game-stage">
+
+    <div id="tower-world">
+
+      <div id="fatout">
+
+        <div class="f-shadow"></div>
+
+        <div class="f-hair">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+
+        <div class="f-head">
+          <div class="f-ear f-ear-left"></div>
+          <div class="f-ear f-ear-right"></div>
+          <div class="f-eye f-eye-left"></div>
+          <div class="f-eye f-eye-right"></div>
+          <div class="f-nose"></div>
+
+          <div class="f-mouth">
+            <span></span>
+          </div>
+        </div>
+
+        <div class="f-neck"></div>
+
+        <div class="f-body">
+          <div class="f-shirt"></div>
+          <div class="f-arm f-arm-left"></div>
+          <div class="f-arm f-arm-right"></div>
+        </div>
+
+        <div class="f-leg f-leg-left"></div>
+        <div class="f-leg f-leg-right"></div>
+
+        <div class="f-shoe f-shoe-left"></div>
+        <div class="f-shoe f-shoe-right"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <button id="exit-btn" class="exit-btn">
+    🚪 خروج
+  </button>
+
+</section>
+
+<section id="game-over-screen" class="overlay hidden">
+
+  <div class="result-card">
+
+    <div id="result-icon">😢</div>
+
+    <h2 id="encouraging-msg">
+      ولا يهمك! جرّب تاني يا بطل 💪
+    </h2>
+
+    <p id="final-score">
+      سكورك:
+      <span>0</span>
+    </p>
+
+    <button id="retry-btn" class="result-btn retry-btn">
+      🔄 إعادة المحاولة
+    </button>
+
+    <button id="home-btn" class="result-btn home-btn">
+      ↩️ رجوع
+    </button>
+
+  </div>
+
+</section>
+
+<section id="level-complete-screen" class="overlay hidden">
+
+  <div class="result-card">
+
+    <div class="success-icon">🎉</div>
+
+    <h2 id="level-message">
+      برافو يا بطل!
+    </h2>
+
+    <p id="level-score">
+      سكورك:
+      <span>0</span>
+    </p>
+
+    <button id="next-level-btn" class="result-btn retry-btn">
+      🚀 المستوى التالي
+    </button>
+
+    <button id="level-home-btn" class="result-btn home-btn">
+      🏠 الرئيسية
+    </button>
+
+  </div>
+
+</section>
+
+<section id="mental-level-complete-screen" class="overlay hidden">
+
+  <div class="result-card">
+
+    <div class="success-icon">🏆</div>
+
+    <h2 id="mental-level-message">
+      برافو يا بطل!
+    </h2>
+
+    <p id="mental-level-score">
+      سكورك:
+      <span>0</span>
+    </p>
+
+    <button id="next-mental-level-btn" class="result-btn retry-btn">
+      🚀 المرحلة التالية
+    </button>
+
+    <button id="mental-level-home-btn" class="result-btn home-btn">
+      🏠 الرئيسية
+    </button>
+
+  </div>
+
+</section>
+
+</div>
+
+<script>
+(() => {
+
+let gameMode="";
+let mentalSection=1;
+let mentalLevel=1;
+let fiveStage=1; let fiveRule=1; let fiveLevel=1;
+let currentAge="";
+let currentQuestion=null;
+let score=0;
+let questionNumber=0;
+let generalLevel=1;
+let generalDifficulty="easy";
+let generalSection=1;
+let nurseryNumber=1;
+let nurseryLearningStart=1;
+let nurseryLearningEnd=10;
+let nurseryLearningMode="nursery";
+let timer=15;
+let timerInterval=null;
+let gameStartTime=0;
+let gameRunning=false;
+let moving=false;
+let currentPlatform=null;
+let currentPlatformBottom=0;
+let playerWorldBottom=62;
+let cameraOffsetY=0;
+let platformId=0;
+
+const $=id=>document.getElementById(id);
+
+const splashScreen=$("splash-screen");
+const modeScreen=$("mode-screen");
+const splashStartBtn=$("splash-start-btn");
+
+splashStartBtn.addEventListener("click",()=>{
+  stopIntroMusic();
+  playEnterVortexSound();
+  splashScreen.classList.add("hidden");
+  modeScreen.classList.remove("hidden");
+});
+const mentalScreen=$("mental-screen");
+const mentalLevelScreen=$("mental-level-screen");
+const fiveRulesScreen=$("five-rules-screen");
+const fiveLevelScreen=$("five-level-screen");
+const generalSectionsScreen=$("general-sections-screen");
+const ageScreen=$("age-screen");
+const nurseryLessonScreen=$("nursery-lesson-screen");
+const nurseryAfterLearningScreen=$("nursery-after-learning-screen");
+const nurseryBigNumber=$("nursery-big-number");
+const nurseryObjects=$("nursery-objects");
+const nurseryCounter=$("nursery-counter");
+const gameScreen=$("game-screen");
+const gameOverScreen=$("game-over-screen");
+const levelCompleteScreen=$("level-complete-screen");
+const mentalLevelCompleteScreen=$("mental-level-complete-screen");
+
+const questionText=$("question-text");
+const mentalVertical=$("mental-vertical");
+const verticalNumbers=$("vertical-numbers");
+const timerValue=$("timer-value");
+const timerClock=$("timer-clock");
+const fatout=$("fatout");
+const gameStage=$("game-stage");
+const towerWorld=$("tower-world");
+
+let audioContext=null;
+
+function initAudio(){
+  if(!audioContext){
+    const Ctx=window.AudioContext||window.webkitAudioContext;
+    if(Ctx) audioContext=new Ctx();
+  }
+
+  if(audioContext&&audioContext.state==="suspended"){
+    audioContext.resume();
+  }
+}
+
+function tone(freq,duration=.1,type="sine",volume=.04){
+  if(!audioContext)return;
+
+  const oscillator=audioContext.createOscillator();
+  const gain=audioContext.createGain();
+
+  oscillator.type=type;
+  oscillator.frequency.value=freq;
+
+  gain.gain.setValueAtTime(
+    volume,
+    audioContext.currentTime
+  );
+
+  gain.gain.exponentialRampToValueAtTime(
+    .001,
+    audioContext.currentTime+duration
+  );
+
+  oscillator.connect(gain);
+  gain.connect(audioContext.destination);
+
+  oscillator.start();
+
+  oscillator.stop(
+    audioContext.currentTime+duration
+  );
+}
+
+function playCorrectSound(){
+  tone(700,.1);
+  setTimeout(()=>tone(950,.14),90);
+}
+
+function playFallSound(){
+  tone(240,.18,"sawtooth");
+
+  setTimeout(()=>{
+    tone(120,.22,"sawtooth");
+  },120);
+}
+
+function playTick(){
+  tone(650,.06,"square",.02);
+}
+
+function playDanger(){
+  tone(350,.09,"square",.03);
+}
+
+/* =====================================================
+   أصوات اللعبة
+   ===================================================== */
+
+function playStartSound(){
+  initAudio();
+  tone(523,.12,"sine",.045);
+  setTimeout(()=>tone(659,.12,"sine",.045),110);
+  setTimeout(()=>tone(784,.22,"sine",.05),220);
+}
+
+function playWinSound(){
+  initAudio();
+  tone(523,.12,"sine",.05);
+  setTimeout(()=>tone(659,.12,"sine",.05),120);
+  setTimeout(()=>tone(784,.16,"sine",.055),240);
+  setTimeout(()=>tone(1047,.28,"sine",.06),400);
+  /* لمسة تصفيق كرتونية */
+  setTimeout(()=>tone(1250,.045,"square",.018),520);
+  setTimeout(()=>tone(1450,.045,"square",.018),600);
+  setTimeout(()=>tone(1250,.045,"square",.018),680);
+}
+
+function playLoseSound(){
+  initAudio();
+  tone(330,.16,"sawtooth",.045);
+  setTimeout(()=>tone(294,.16,"sawtooth",.045),170);
+  setTimeout(()=>tone(247,.18,"sawtooth",.045),340);
+  setTimeout(()=>tone(196,.45,"sawtooth",.05),530);
+}
+
+document.addEventListener("click",(event)=>{
+  const button=event.target.closest("button");
+  if(!button || button.id==="splash-start-btn")return;
+  initAudio();
+  tone(620,.055,"sine",.025);
+});
+
+/* =====================================================
+   قاعدة الأربعة
+   ===================================================== */
+
+function generateMentalFourQuestion(){
+
+  let count;
+
+  if(mentalLevel===1){
+    count=2;
+  }
+  else if(mentalLevel===2){
+    count=3;
+  }
+  else{
+    count=Math.random()<.5?4:5;
+  }
+
+  const numbers=[];
+
+  let total=
+    Math.floor(Math.random()*4)+1;
+
+  numbers.push(total);
+
+  const choices=[
+    -4,-3,-2,-1,0,1,2,3,4
+  ];
+
+  for(let i=1;i<count;i++){
+
+    const validChoices=choices.filter(number=>{
+      const newTotal=total+number;
+
+      return newTotal>=0&&newTotal<=4;
+    });
+
+    const nextNumber=
+      validChoices[
+        Math.floor(
+          Math.random()*validChoices.length
+        )
+      ];
+
+    numbers.push(nextNumber);
+
+    total+=nextNumber;
+  }
+
+  return{
+    numbers,
+    answer:total
+  };
+}
+
+/* =====================================================
+   قاعدة الخمسة — المكملات
+   ===================================================== */
+function fiveLevelCount(){
+  if(fiveLevel===1) return 2;
+  if(fiveLevel===2) return 3;
+  return Math.random()<0.5 ? 4 : 5;
+}
+
+function complementOfFive(n){
+  return 5-n;
+}
+
+function fiveAllowedMoves(){
+  if(fiveRule===2) return [1,4,-1,-4];
+  if(fiveRule===3) return [2,3,-2,-3];
+  return [1,2,3,4,-1,-2,-3,-4];
+}
+
+function generateMentalFiveQuestion(){
+  const count=fiveLevelCount();
+  const moves=fiveAllowedMoves();
+  let start=5;
+  const numbers=[String(start)];
+  let total=start;
+
+  for(let i=1;i<count;i++){
+    let candidates=moves.filter(move=>total+move>=0&&total+move<=9);
+    if(!candidates.length){
+      start=Math.floor(Math.random()*10);
+      numbers[0]=String(start);
+      total=start;
+      i=1;
+      numbers.length=1;
+      continue;
+    }
+    const move=candidates[Math.floor(Math.random()*candidates.length)];
+    total+=move;
+    numbers.push((move>=0?'+':'-')+Math.abs(move));
+  }
+
+  return {numbers,answer:total};
+}
+
+/* =====================================================
+   GENERAL
+   ===================================================== */
+
+function buildNurseryQuestion(a,b,op,object){
+
+  const answer=op==="+" ? a+b : a-b;
+
+  return{
+    html:`<div class="nursery-game-equation">
+      <div class="nursery-game-group">${object.repeat(a)}</div>
+      <div class="nursery-game-op">${op}</div>
+      <div class="nursery-game-group">${object.repeat(b)}</div>
+      <div class="nursery-game-op">=</div>
+      <div class="nursery-game-question">؟</div>
+    </div>`,
+    answer
+  };
+}
+
+function generateNurseryQuestion(){
+
+  const objects=["🍎","🍌","🍓","⚽","🎈","🚗","⭐","🧸","🌸","🧩"];
+  const object=objects[Math.floor(Math.random()*objects.length)];
+  let a,b,op;
+
+  if(Math.random()<0.62){
+    a=Math.floor(Math.random()*5)+1;
+    b=Math.floor(Math.random()*(10-a))+1;
+    op="+";
+  }else{
+    a=Math.floor(Math.random()*9)+2;
+    b=Math.floor(Math.random()*a)+1;
+    op="−";
+  }
+
+  return buildNurseryQuestion(a,b,op,object);
+}
+
+function generateNursery11To20Question(){
+
+  const objects=["🍎","🍌","🍓","⚽","🎈","🚗","⭐","🧸","🌸","🧩"];
+  const object=objects[Math.floor(Math.random()*objects.length)];
+  let a,b,answer,op;
+
+  if(Math.random()<0.7){
+    answer=Math.floor(Math.random()*10)+11;
+    a=Math.floor(Math.random()*(answer-1))+1;
+    b=answer-a;
+    op="+";
+  }else{
+    // في قسم ١١–٢٠ لا نُظهر أي رقم أكبر من ٢٠
+    answer=Math.floor(Math.random()*10)+11;
+    const maxB=20-answer;
+    b=Math.floor(Math.random()*(maxB+1));
+    if(b<1) b=1;
+    a=answer+b;
+    op="−";
+  }
+
+  return buildNurseryQuestion(a,b,op,object);
+}
+
+function generateGeneralQuestion(){
+
+  let a,b,answer,textQuestion,op;
+  const d=generalDifficulty;
+
+  // المستوى الأول: أقل من 10 سنين
+  if(generalLevel===1){
+
+    if(d==="easy"){
+      op=Math.random()<.5?"+":"-";
+      a=Math.floor(Math.random()*10)+1;
+      b=Math.floor(Math.random()*9)+1;
+      if(op==="-" && b>a)[a,b]=[b,a];
+      answer=op==="+"?a+b:a-b;
+      textQuestion=`${a} ${op} ${b} = ؟`;
+    }
+
+    else if(d==="medium"){
+      const type=Math.floor(Math.random()*3);
+
+      if(type<2){
+        op=type===0?"+":"-";
+        a=Math.floor(Math.random()*31)+10;
+        b=Math.floor(Math.random()*21)+5;
+        if(op==="-" && b>a)[a,b]=[b,a];
+        answer=op==="+"?a+b:a-b;
+        textQuestion=`${a} ${op} ${b} = ؟`;
+      }else{
+        a=Math.floor(Math.random()*5)+2;
+        b=Math.floor(Math.random()*5)+2;
+        answer=a*b;
+        textQuestion=`${a} × ${b} = ؟`;
+      }
+    }
+
+    else{
+      const type=Math.floor(Math.random()*3);
+
+      if(type===0){
+        a=Math.floor(Math.random()*51)+25;
+        b=Math.floor(Math.random()*41)+10;
+        answer=a+b;
+        textQuestion=`${a} + ${b} = ؟`;
+      }else if(type===1){
+        a=Math.floor(Math.random()*81)+20;
+        b=Math.floor(Math.random()*51)+10;
+        if(b>a)[a,b]=[b,a];
+        answer=a-b;
+        textQuestion=`${a} − ${b} = ؟`;
+      }else{
+        a=Math.floor(Math.random()*8)+2;
+        b=Math.floor(Math.random()*9)+2;
+        answer=a*b;
+        textQuestion=`${a} × ${b} = ؟`;
+      }
+    }
+  }
+
+  // المستوى الثاني: من 11 سنة فأكثر — تحدي أعلى شوية فقط
+  else{
+
+    if(d==="easy"){
+      op=Math.random()<.5?"+":"-";
+      a=Math.floor(Math.random()*21)+5;
+      b=Math.floor(Math.random()*16)+3;
+      if(op==="-" && b>a)[a,b]=[b,a];
+      answer=op==="+"?a+b:a-b;
+      textQuestion=`${a} ${op} ${b} = ؟`;
+    }
+
+    else if(d==="medium"){
+      const type=Math.floor(Math.random()*3);
+
+      if(type===0){
+        a=Math.floor(Math.random()*41)+20;
+        b=Math.floor(Math.random()*31)+10;
+        answer=a+b;
+        textQuestion=`${a} + ${b} = ؟`;
+      }else if(type===1){
+        a=Math.floor(Math.random()*61)+30;
+        b=Math.floor(Math.random()*31)+10;
+        if(b>a)[a,b]=[b,a];
+        answer=a-b;
+        textQuestion=`${a} − ${b} = ؟`;
+      }else{
+        a=Math.floor(Math.random()*5)+2;
+        b=Math.floor(Math.random()*5)+2;
+        answer=a*b;
+        textQuestion=`${a} × ${b} = ؟`;
+      }
+    }
+
+    else{
+      const type=Math.floor(Math.random()*3);
+
+      if(type===0){
+        a=Math.floor(Math.random()*101)+50;
+        b=Math.floor(Math.random()*81)+20;
+        answer=a+b;
+        textQuestion=`${a} + ${b} = ؟`;
+      }else if(type===1){
+        a=Math.floor(Math.random()*151)+70;
+        b=Math.floor(Math.random()*81)+20;
+        if(b>a)[a,b]=[b,a];
+        answer=a-b;
+        textQuestion=`${a} − ${b} = ؟`;
+      }else{
+        a=Math.floor(Math.random()*8)+3;
+        b=Math.floor(Math.random()*7)+2;
+        answer=a*b;
+        textQuestion=`${a} × ${b} = ؟`;
+      }
+    }
+  }
+
+  return{
+    text:textQuestion,
+    answer
+  };
+}
+
+function renderMentalVertical(numbers){
+
+  verticalNumbers.innerHTML="";
+
+  numbers.forEach(number=>{
+
+    const div=document.createElement("div");
+
+    div.className="vertical-number";
+    div.textContent=String(number);
+
+    verticalNumbers.appendChild(div);
+
+  });
+
+  questionText.style.display="none";
+
+  mentalVertical.classList.add("visible");
+}
+
+function renderNormal(text){
+
+  mentalVertical.classList.remove("visible");
+
+  questionText.style.display="block";
+
+  questionText.textContent=text;
+}
+
+/* =====================================================
+   ANSWERS
+   ===================================================== */
+
+function createAnswerValues(correct,count){
+
+  const answers=[correct];
+
+  let guard=0;
+
+  while(
+    answers.length<count&&
+    guard<200
+  ){
+
+    guard++;
+
+    const difference=
+      Math.floor(Math.random()*5)+1;
+
+    let value;
+
+    if(Math.random()<.5){
+      value=correct+difference;
+    }
+    else{
+      value=correct-difference;
+    }
+
+    if(value<0){
+      value=correct+difference;
+    }
+
+    if(
+      value>=0&&
+      !answers.includes(value)
+    ){
+      answers.push(value);
+    }
+  }
+
+  let fallback=0;
+
+  while(answers.length<count){
+
+    if(!answers.includes(fallback)){
+      answers.push(fallback);
+    }
+
+    fallback++;
+  }
+
+  for(
+    let i=answers.length-1;
+    i>0;
+    i--
+  ){
+
+    const j=
+      Math.floor(
+        Math.random()*(i+1)
+      );
+
+    [
+      answers[i],
+      answers[j]
+    ]=[
+      answers[j],
+      answers[i]
+    ];
+  }
+
+  return answers;
+}
+
+/* =====================================================
+   CLEAR
+   ===================================================== */
+
+function clearPlatforms(){
+
+  towerWorld
+    .querySelectorAll(".step")
+    .forEach(platform=>{
+      platform.remove();
+    });
+}
+
+/* =====================================================
+   PLATFORM
+   ===================================================== */
+
+function makePlatform(config){
+
+  const platform=document.createElement("button");
+
+  platform.className="step new-platform";
+
+  platform.dataset.bottom=config.bottom;
+  platform.dataset.id=++platformId;
+
+  platform.style.bottom=`${config.bottom}px`;
+
+  if(config.left!==undefined){
+    platform.style.left=`${config.left}px`;
+  }
+
+  if(config.right!==undefined){
+    platform.style.right=`${config.right}px`;
+  }
+
+  if(config.answer!==undefined){
+
+    platform.textContent=config.answer;
+    platform.dataset.answer=config.answer;
+
+    platform.addEventListener(
+      "click",
+      ()=>chooseAnswer(platform)
+    );
+
+  }
+  else{
+
+    platform.classList.add(
+      "current-platform"
+    );
+
+    platform.disabled=true;
+  }
+
+  towerWorld.appendChild(platform);
+
+  return platform;
+}
+
+/* =====================================================
+   INITIAL
+   ===================================================== */
+
+function setInitialTower(){
+
+  clearPlatforms();
+
+  cameraOffsetY=0;
+  currentPlatform=null;
+  currentPlatformBottom=0;
+  playerWorldBottom=62;
+
+  fatout.classList.remove(
+    "jumping",
+    "falling"
+  );
+
+  fatout.style.left=
+    `${gameStage.clientWidth/2-38}px`;
+
+  fatout.style.bottom="62px";
+
+  towerWorld.style.transform=
+    "translateY(0)";
+}
+
+/* =====================================================
+   NEW PLATFORMS
+   ===================================================== */
+
+function revealNextPlatforms(){
+
+  towerWorld
+    .querySelectorAll(
+      ".step:not(.current-platform)"
+    )
+    .forEach(platform=>{
+
+      platform.classList.add(
+        "fading-platform"
+      );
+
+      setTimeout(()=>{
+
+        if(platform.parentNode){
+          platform.remove();
+        }
+
+      },300);
+    });
+
+  const choiceCount=
+    gameMode==="mental"?2:3;
+
+  const values=
+    createAnswerValues(
+      currentQuestion.answer,
+      choiceCount
+    );
+
+  const width=gameStage.clientWidth;
+
+  let layouts;
+
+  if(choiceCount===2){
+
+    layouts=[
+      {
+        left:14,
+        bottom:currentPlatformBottom+104
+      },
+      {
+        right:16,
+        bottom:currentPlatformBottom+160
+      }
+    ];
+
+  }
+  else{
+
+    /* 3 بسطات فقط في الرياضيات العامة،
+       والبسطات الجديدة تتوزع بعيدًا عن فطوط
+       حتى لا تظهر واحدة مباشرة خلفه. */
+    const fatoutCenter =
+      (parseFloat(fatout.style.left) || (width/2-38)) +
+      (fatout.offsetWidth/2);
+
+    const playerOnLeft = fatoutCenter < width/2;
+
+    layouts = playerOnLeft ? [
+      {
+        right:12,
+        bottom:currentPlatformBottom+88
+      },
+      {
+        left:12,
+        bottom:currentPlatformBottom+154
+      },
+      {
+        right:46,
+        bottom:currentPlatformBottom+224
+      }
+    ] : [
+      {
+        left:12,
+        bottom:currentPlatformBottom+88
+      },
+      {
+        right:12,
+        bottom:currentPlatformBottom+154
+      },
+      {
+        left:46,
+        bottom:currentPlatformBottom+224
+      }
+    ];
+  }
+
+  layouts.forEach((layout,index)=>{
+
+    if(layout.left!==undefined){
+
+      layout.left=
+        Math.min(
+          layout.left,
+          Math.max(8,width-108)
+        );
+    }
+
+    makePlatform({
+      ...layout,
+      answer:values[index]
+    });
+
+  });
+}
+
+/* =====================================================
+   CAMERA
+   ===================================================== */
+
+function updateCamera(){
+
+  const stageHeight=
+    gameStage.clientHeight;
+
+  const target=stageHeight*.58;
+
+  const neededOffset=
+    Math.max(
+      0,
+      playerWorldBottom+
+      target-
+      stageHeight
+    );
+
+  if(
+    neededOffset>
+    cameraOffsetY+1
+  ){
+
+    cameraOffsetY=neededOffset;
+
+    towerWorld.style.transform=
+      `translateY(${cameraOffsetY}px)`;
+  }
+}
+
+/* =====================================================
+   JUMP
+   ===================================================== */
+
+function jumpTo(step){
+
+  const stepRect=
+    step.getBoundingClientRect();
+
+  const stageRect=
+    gameStage.getBoundingClientRect();
+
+  const targetLeft=
+    stepRect.left-
+    stageRect.left+
+    stepRect.width/2-
+    fatout.offsetWidth/2;
+
+  const targetBottom=
+    Number(step.dataset.bottom)+
+    step.offsetHeight;
+
+  fatout.style.left=
+    `${targetLeft}px`;
+
+  fatout.style.bottom=
+    `${targetBottom}px`;
+
+  playerWorldBottom=targetBottom;
+
+  fatout.classList.remove(
+    "falling",
+    "jumping"
+  );
+
+  void fatout.offsetWidth;
+
+  fatout.classList.add("jumping");
+}
+
+/* =====================================================
+   LAND
+   ===================================================== */
+
+function land(step){
+
+  if(
+    currentPlatform&&
+    currentPlatform!==step
+  ){
+
+    const oldPlatform=currentPlatform;
+
+    oldPlatform.classList.add(
+      "fading-platform"
+    );
+
+    setTimeout(()=>{
+
+      if(oldPlatform.parentNode){
+        oldPlatform.remove();
+      }
+
+    },300);
+  }
+
+  currentPlatform=step;
+
+  currentPlatform.disabled=true;
+
+  currentPlatform.classList.add(
+    "current-platform"
+  );
+
+  currentPlatform.classList.remove(
+    "new-platform"
+  );
+
+  currentPlatformBottom=
+    Number(step.dataset.bottom);
+
+  playerWorldBottom=
+    currentPlatformBottom+
+    step.offsetHeight;
+
+  updateCamera();
+}
+
+/* =====================================================
+   ANSWER
+   ===================================================== */
+
+function chooseAnswer(step){
+
+  if(
+    !gameRunning||
+    moving||
+    step.disabled
+  ){
+    return;
+  }
+
+  moving=true;
+
+  clearInterval(timerInterval);
+
+  const selected=
+    Number(step.dataset.answer);
+
+  if(
+    selected===
+    currentQuestion.answer
+  ){
+
+    score++;
+
+    playCorrectSound();
+
+    jumpTo(step);
+
+    setTimeout(()=>{
+
+      land(step);
+
+      moving=false;
+
+      nextQuestion();
+
+    },520);
+
+  }
+  else{
+
+    playFallSound();
+
+    /* المنصة التي اختارها الطفل غلط تختفي،
+       والإجابة الصحيحة تفضل منورة وبتـرعش */
+    step.classList.add(
+      "fading-platform"
+    );
+
+    const correctPlatform =
+      Array.from(
+        towerWorld.querySelectorAll(".step")
+      ).find(platform =>
+        Number(platform.dataset.answer) ===
+        currentQuestion.answer
+      );
+
+    if(correctPlatform){
+      correctPlatform.classList.add(
+        "correct-answer-hint"
+      );
+    }
+
+    fatout.classList.remove(
+      "jumping"
+    );
+
+    void fatout.offsetWidth;
+
+    fatout.classList.add(
+      "falling"
+    );
+
+    /* ندي الطفل وقت كفاية يشوف الإجابة الصح،
+       ووبعد ثانيتين تظهر إعادة المحاولة */
+    setTimeout(()=>{
+
+      if(correctPlatform){
+        correctPlatform.classList.remove(
+          "correct-answer-hint"
+        );
+      }
+
+      endGame();
+
+    },2000);
+  }
+}
+
+/* =====================================================
+   TIMER
+   ===================================================== */
+
+function startTimer(){
+  clearInterval(timerInterval);
+
+  if(gameMode === "general" || gameMode === "nursery" || gameMode === "nursery11"){
+    if(!gameStartTime) gameStartTime=Date.now();
+    if(timerClock) timerClock.classList.remove("danger");
+
+    const updateElapsed=()=>{
+      if(!gameRunning) return;
+      const elapsed=Math.floor((Date.now()-gameStartTime)/1000);
+      if(timerValue) timerValue.textContent = `${elapsed} ث`;
+      initAudio();
+      playTick();
+    };
+
+    updateElapsed();
+    timerInterval=setInterval(updateElapsed,1000);
+    return;
+  }
+
+  timer = 15;
+  if(timerValue) timerValue.textContent = timer;
+  if(timerClock) timerClock.classList.remove("danger");
+
+  timerInterval = setInterval(() => {
+    if(!gameRunning) return;
+    timer--;
+    if(timerValue) timerValue.textContent = timer;
+
+    if(timer > 3){
+      playTick();
+    }
+
+    if(timer <= 3){
+      if(timerClock) timerClock.classList.add("danger");
+      playDanger();
+    }
+
+    if(timer <= 0){
+      clearInterval(timerInterval);
+      endGame();
+    }
+  },1000);
+}
+
+/* =====================================================
+   TOTAL
+   ===================================================== */
+
+function totalQuestions(){
+
+  if(gameMode==="general"){
+    return 20;
+  }
+
+  if(gameMode==="nursery"||gameMode==="nursery11"){
+    return 10;
+  }
+
+  if(mentalSection===1){
+    return 10;
+  }
+
+  return 20;
+}
+
+/* =====================================================
+   NEXT
+   ===================================================== */
+
+function nextQuestion(){
+
+  if(!gameRunning)return;
+
+  questionNumber++;
+
+  if(
+    questionNumber>
+    totalQuestions()
+  ){
+
+    if(gameMode==="general"){
+      finishGeneralLevel();
+    }
+    else if(gameMode==="nursery"||gameMode==="nursery11"){
+      finishNurseryGame();
+    }
+    else if(mentalSection===1){
+      finishMentalLevel();
+    }
+    else{
+      finishMentalSectionTwo();
+    }
+
+    return;
+  }
+
+  if(
+    gameMode==="mental"&&
+    mentalSection===1
+  ){
+
+    currentQuestion=
+      generateMentalFourQuestion();
+
+    renderMentalVertical(
+      currentQuestion.numbers
+    );
+
+  }
+  else if(
+    gameMode==="mental"&&
+    mentalSection===2
+  ){
+
+    currentQuestion=
+      generateMentalFiveQuestion();
+
+    renderMentalVertical(
+      currentQuestion.numbers
+    );
+
+  }
+  else if(gameMode==="nursery"||gameMode==="nursery11"){
+
+    currentQuestion=
+      gameMode==="nursery11"
+        ? generateNursery11To20Question()
+        : generateNurseryQuestion();
+
+    renderNormal("");
+    questionText.innerHTML=currentQuestion.html;
+    questionText.style.display="block";
+
+  }
+  else{
+
+    currentQuestion=
+      generateGeneralQuestion();
+
+    renderNormal(
+      currentQuestion.text
+    );
+  }
+
+  revealNextPlatforms();
+
+  startTimer();
+}
+
+function finishNurseryGame(){
+
+  gameRunning=false;
+  playWinSound();
+  clearInterval(timerInterval);
+
+  /* عرض مجموع الإجابات الصحيحة بعد إنهاء أسئلة الروضة */
+  const nurseryScore=levelCompleteScreen.querySelector("#level-score span");
+  if(nurseryScore) nurseryScore.textContent=score;
+
+  gameScreen.classList.add("hidden");
+  levelCompleteScreen.classList.remove("hidden");
+
+  const title=levelCompleteScreen.querySelector("h2");
+  const subtitle=levelCompleteScreen.querySelector(".screen-subtitle");
+  if(title) title.textContent="برافو يا بطل! 🎉";
+  if(subtitle){
+    const totalTime=Math.floor((Date.now()-gameStartTime)/1000);
+    const minutes=Math.floor(totalTime/60);
+    const seconds=totalTime%60;
+    const timeText=minutes>0 ? `${minutes} دقيقة و ${seconds} ثانية` : `${seconds} ثانية`;
+    subtitle.textContent=`خلصت 10 أسئلة في ${timeText}! ⭐`;
+  }
+}
+
+/* =====================================================
+   SCORE
+   ===================================================== */
+
+function scoreMessage(){
+
+  const total=totalQuestions();
+
+  const percentage=
+    score/total*100;
+
+  if(percentage<=20){
+    return[
+      "💪",
+      "ولا يهمك! جرّب تاني يا بطل 💪"
+    ];
+  }
+
+  if(percentage<=50){
+    return[
+      "🔥",
+      "بداية حلوة! كمل وحاول تزود سكورك 🔥"
+    ];
+  }
+
+  if(percentage<=80){
+    return[
+      "🎯",
+      "شاطر جدًا! قربت تكسر رقمك 🎯"
+    ];
+  }
+
+  return[
+    "🏆",
+    "ممتاز يا بطل! أداء رائع 👏"
+  ];
+}
+
+/* =====================================================
+   GAME OVER
+   ===================================================== */
+
+function endGame(){
+
+  if(!gameRunning)return;
+
+  gameRunning=false;
+  playLoseSound();
+
+  clearInterval(timerInterval);
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
+
+  document
+    .querySelector("#final-score span")
+    .textContent=score;
+
+  const message=scoreMessage();
+
+  $("result-icon").textContent=message[0];
+
+  $("encouraging-msg").textContent=message[1];
+
+  fatout.classList.remove("jumping");
+
+  fatout.classList.add("falling");
+
+  setTimeout(()=>{
+
+    gameOverScreen.classList.remove(
+      "hidden"
+    );
+
+  },650);
+}
+
+/* =====================================================
+   MENTAL COMPLETE
+   ===================================================== */
+
+function finishMentalLevel(){
+
+  gameRunning=false;
+  playWinSound();
+
+  clearInterval(timerInterval);
+
+  $("mental-level-message").textContent=
+    mentalLevel<3
+      ?`برافو! خلصت المستوى ${mentalLevel} 🎉`
+      :"برافو يا بطل! خلصت قاعدة الأربعة كلها 👏🎉";
+
+  document
+    .querySelector("#mental-level-score span")
+    .textContent=score;
+
+  $("next-mental-level-btn").textContent=
+    mentalLevel<3
+      ?`🚀 المستوى ${mentalLevel+1}`
+      :"🏠 إنهاء";
+
+  mentalLevelCompleteScreen.classList.remove(
+    "hidden"
+  );
+}
+
+/* =====================================================
+   قاعدة الخمسة COMPLETE
+   ===================================================== */
+
+function finishMentalSectionTwo(){
+
+  gameRunning=false;
+  playWinSound();
+
+  clearInterval(timerInterval);
+
+  $("result-icon").textContent="🏆";
+
+  $("encouraging-msg").textContent=
+    `برافو يا بطل! خلصت المستوى ${fiveLevel} 👏🎉`;
+
+  document
+    .querySelector("#final-score span")
+    .textContent=score;
+
+  gameOverScreen.classList.remove(
+    "hidden"
+  );
+}
+
+/* =====================================================
+   GENERAL COMPLETE
+   ===================================================== */
+
+function finishGeneralLevel(){
+
+  gameRunning=false;
+  playWinSound();
+  clearInterval(timerInterval);
+
+  document
+    .querySelector("#level-score span")
+    .textContent=score;
+
+  $("level-message").textContent=
+    "برافو يا بطل! خلصت 20 سؤال 🎉";
+
+  $("next-level-btn").textContent=
+    "🔄 العب تاني";
+
+  $("level-home-btn").textContent=
+    "↩️ رجوع";
+
+  levelCompleteScreen.classList.remove("hidden");
+}
+
+/* =====================================================
+   INTRO MUSIC - SPLASH ONLY
+   ===================================================== */
+let introMusicStarted=false;
+let introAudioContext=null;
+let introMusicTimer=null;
+let introMasterGain=null;
+
+function startIntroMusic(){
+  if(introMusicStarted)return;
+  introMusicStarted=true;
+
+  try{
+    introAudioContext=new (window.AudioContext||window.webkitAudioContext)();
+    if(introAudioContext.state==="suspended") introAudioContext.resume();
+
+    const melody=[261.63,329.63,392.00,523.25,587.33,659.25,783.99,659.25,587.33,523.25,392.00,329.63];
+    const bass=[130.81,164.81,196.00,220.00];
+    let i=0;
+
+    introMasterGain=introAudioContext.createGain();
+    introMasterGain.gain.value=1.0;
+    introMasterGain.connect(introAudioContext.destination);
+
+    const playIntroNote=()=>{
+      if(!introAudioContext)return;
+      const now=introAudioContext.currentTime;
+
+      const osc=introAudioContext.createOscillator();
+      const gain=introAudioContext.createGain();
+      osc.type="triangle";
+      osc.frequency.value=melody[i%melody.length];
+      gain.gain.setValueAtTime(0.0001,now);
+      gain.gain.exponentialRampToValueAtTime(0.30,now+0.04);
+      gain.gain.exponentialRampToValueAtTime(0.0001,now+0.52);
+      osc.connect(gain);
+      gain.connect(introMasterGain);
+      osc.start(now);
+      osc.stop(now+0.55);
+
+      if(i%3===0){
+        const bassOsc=introAudioContext.createOscillator();
+        const bassGain=introAudioContext.createGain();
+        bassOsc.type="sawtooth";
+        bassOsc.frequency.value=bass[(i/3|0)%bass.length];
+        bassGain.gain.setValueAtTime(0.0001,now);
+        bassGain.gain.exponentialRampToValueAtTime(0.14,now+0.03);
+        bassGain.gain.exponentialRampToValueAtTime(0.0001,now+0.65);
+        bassOsc.connect(bassGain);
+        bassGain.connect(introMasterGain);
+        bassOsc.start(now);
+        bassOsc.stop(now+0.68);
+      }
+      i++;
+    };
+
+    playIntroNote();
+    introMusicTimer=setInterval(playIntroNote,480);
+  }catch(e){}
+}
+
+function stopIntroMusic(){
+  if(introMusicTimer){
+    clearInterval(introMusicTimer);
+    introMusicTimer=null;
+  }
+  if(introAudioContext){
+    try{introAudioContext.close();}catch(e){}
+    introAudioContext=null;
+    introMasterGain=null;
+  }
+  introMusicStarted=false;
+}
+
+function playEnterVortexSound(){
+  initAudio();
+  if(!audioContext)return;
+
+  const now=audioContext.currentTime;
+  const osc=audioContext.createOscillator();
+  const gain=audioContext.createGain();
+  const filter=audioContext.createBiquadFilter();
+
+  osc.type="sine";
+  osc.frequency.setValueAtTime(900,now);
+  osc.frequency.exponentialRampToValueAtTime(120,now+0.42);
+  osc.frequency.exponentialRampToValueAtTime(620,now+0.78);
+
+  filter.type="lowpass";
+  filter.frequency.setValueAtTime(1800,now);
+  filter.frequency.exponentialRampToValueAtTime(500,now+0.78);
+
+  gain.gain.setValueAtTime(.0001,now);
+  gain.gain.exponentialRampToValueAtTime(.16,now+.08);
+  gain.gain.exponentialRampToValueAtTime(.0001,now+.82);
+
+  osc.connect(filter);
+  filter.connect(gain);
+  gain.connect(audioContext.destination);
+  osc.start(now);
+  osc.stop(now+.85);
+
+  setTimeout(()=>tone(260,.16,"triangle",.045),300);
+  setTimeout(()=>tone(520,.22,"sine",.055),470);
+}
+
+const splashScreenElement=document.getElementById("splash-screen");
+if(splashScreenElement){
+  splashScreenElement.addEventListener("pointerdown",(event)=>{
+    if(event.target.closest("#splash-start-btn"))return;
+    startIntroMusic();
+  });
+}
+
+/* =====================================================
+   START
+   ===================================================== */
+
+function startGame(){
+
+  stopIntroMusic();
+
+  clearInterval(timerInterval);
+
+  gameRunning=true;
+  moving=false;
+  score=0;
+  questionNumber=0;
+  gameStartTime=Date.now();
+
+  gameOverScreen.classList.add("hidden");
+  levelCompleteScreen.classList.add("hidden");
+  mentalLevelCompleteScreen.classList.add("hidden");
+
+  modeScreen.classList.add("hidden");
+  mentalScreen.classList.add("hidden");
+  mentalLevelScreen.classList.add("hidden");
+  fiveRulesScreen.classList.add("hidden");
+  generalSectionsScreen.classList.add("hidden");
+  ageScreen.classList.add("hidden");
+  nurseryLessonScreen.classList.add("hidden");
+
+  gameScreen.classList.remove("hidden");
+
+  if(gameMode==="mental"){
+    gameScreen.classList.add("mental-mode");
+  }
+  else{
+    gameScreen.classList.remove("mental-mode");
+  }
+
+  gameScreen.classList.toggle("nursery-game-mode",gameMode==="nursery"||gameMode==="nursery11");
+
+  initAudio();
+
+  if(timerValue){
+    timerValue.textContent =
+      gameMode==="general" ? "0 ث" : "15";
+  }
+
+  setInitialTower();
+
+  nextQuestion();
+}
+
+/* =====================================================
+   HOME
+   ===================================================== */
+
+function goHome(){
+
+  gameRunning=false;
+
+  clearInterval(timerInterval);
+
+  gameScreen.classList.add("hidden");
+  gameOverScreen.classList.add("hidden");
+  levelCompleteScreen.classList.add("hidden");
+  mentalLevelCompleteScreen.classList.add("hidden");
+  mentalLevelScreen.classList.add("hidden");
+  fiveRulesScreen.classList.add("hidden");
+  generalSectionsScreen.classList.add("hidden");
+  mentalScreen.classList.add("hidden");
+  ageScreen.classList.add("hidden");
+  nurseryLessonScreen.classList.add("hidden");
+
+  modeScreen.classList.remove("hidden");
+}
+
+/* =====================================================
+   BUTTONS
+   ===================================================== */
+
+$("btn-mental").addEventListener("click",()=>{
+
+  modeScreen.classList.add("hidden");
+  mentalScreen.classList.remove("hidden");
+
+});
+
+$("btn-nursery").addEventListener("click",()=>{
+
+  modeScreen.classList.add("hidden");
+  ageScreen.classList.remove("hidden");
+
+});
+
+$("btn-general").addEventListener("click",()=>{
+
+  gameMode="general";
+  generalLevel=1;
+  generalDifficulty="easy";
+
+  modeScreen.classList.add("hidden");
+  generalSectionsScreen.classList.remove("hidden");
+
+});
+
+$("general-back").addEventListener("click",()=>{
+
+  generalSectionsScreen.classList.add("hidden");
+  modeScreen.classList.remove("hidden");
+
+});
+
+document
+  .querySelectorAll(".general-difficulty-btn")
+  .forEach(button=>{
+
+    button.addEventListener("click",()=>{
+
+      gameMode="general";
+      generalLevel=Number(button.dataset.generalLevel);
+      generalDifficulty=button.dataset.generalDifficulty;
+
+      generalSectionsScreen.classList.add("hidden");
+
+      startGame();
+
+    });
+
+  });
+
+$("btn-section-one").addEventListener("click",()=>{
+
+  mentalScreen.classList.add("hidden");
+  mentalLevelScreen.classList.remove("hidden");
+
+});
+
+/* ===== دخول قاعدة الخمسة ===== */
+
+$("btn-section-two").addEventListener("click",()=>{
+
+  mentalScreen.classList.add("hidden");
+  fiveRulesScreen.classList.remove("hidden");
+
+});
+
+/* ===== اختيار قاعدة من قاعدة الخمسة ===== */
+document.querySelectorAll("[data-five-rule]").forEach(button=>{
+  button.addEventListener("click",()=>{
+    fiveRule=Number(button.dataset.fiveRule);
+    fiveRulesScreen.classList.add("hidden");
+    fiveLevelScreen.classList.remove("hidden");
+    $("five-level-title").textContent =
+      fiveRule===1 ? "القاعدة الأساسية ⭐" :
+      fiveRule===2 ? "قاعدة الواحد والأربعة 1️⃣4️⃣" :
+      "قاعدة الثلاثة والاثنين 3️⃣2️⃣";
+  });
+});
+
+/* ===== مستويات قواعد الخمسة ===== */
+document.querySelectorAll(".five-level-btn").forEach(button=>{
+  button.addEventListener("click",()=>{
+    gameMode="mental";
+    mentalSection=2;
+    fiveLevel=Number(button.dataset.fiveLevel);
+    fiveRulesScreen.classList.add("hidden");
+    fiveLevelScreen.classList.add("hidden");
+    startGame();
+  });
+});
+
+/* ===== تحدي القواعد المركبة — موجود كما هو ===== */
+document.querySelectorAll('[data-five-stage="4"]').forEach(button=>{
+  button.addEventListener("click",()=>{
+    gameMode="mental";
+    mentalSection=2;
+    fiveStage=4;
+    fiveLevel=3;
+    fiveRulesScreen.classList.add("hidden");
+    startGame();
+  });
+});
+
+/* ===== مراحل قاعدة الأربعة ===== */
+
+document
+  .querySelectorAll(".mental-level-btn")
+  .forEach(button=>{
+
+    button.addEventListener("click",()=>{
+
+      gameMode="mental";
+      mentalSection=1;
+
+      mentalLevel=
+        Number(button.dataset.level);
+
+      startGame();
+
+    });
+
+  });
+
+/* ===== العامة ===== */
+
+function openNurseryLearning(start,end,mode){
+
+  nurseryNumber=start;
+  nurseryLearningStart=start;
+  nurseryLearningEnd=end;
+  nurseryLearningMode=mode;
+
+  nurseryLessonScreen.classList.toggle("nursery-lesson-11-20", mode==="nursery11");
+
+  ageScreen.classList.add("hidden");
+  nurseryAfterLearningScreen.classList.add("hidden");
+  nurseryLessonScreen.classList.remove("hidden");
+  renderNurseryNumber();
+}
+
+$("btn-learn-numbers").addEventListener("click",()=>{
+  openNurseryLearning(1,10,"nursery");
+});
+
+$("btn-learn-numbers-11-20").addEventListener("click",()=>{
+  openNurseryLearning(11,20,"nursery11");
+});
+
+function renderNurseryNumber(){
+
+  const arabicNumbers=["٠","١","٢","٣","٤","٥","٦","٧","٨","٩","١٠","١١","١٢","١٣","١٤","١٥","١٦","١٧","١٨","١٩","٢٠"];
+  const countingWords=["صفر","واحد","اثنان","ثلاثة","أربعة","خمسة","ستة","سبعة","ثمانية","تسعة","عشرة","أحد عشر","اثنا عشر","ثلاثة عشر","أربعة عشر","خمسة عشر","ستة عشر","سبعة عشر","ثمانية عشر","تسعة عشر","عشرون"];
+  const objects=["","🍎","🍌","🍓","⚽","🎈","🚗","⭐","🧸","🌸","🧩","🍎","🍌","🍓","⚽","🎈","🚗","⭐","🧸","🌸","🧩"];
+  const count=nurseryNumber;
+
+  nurseryBigNumber.textContent=arabicNumbers[count];
+  nurseryCounter.textContent=`${arabicNumbers[count]} / ${arabicNumbers[nurseryLearningEnd]}`;
+  $("nursery-platform-number").textContent=arabicNumbers[count];
+
+  const icon=objects[count];
+  const cells=Array.from({length:count},()=>`<span class="nursery-count-item">${icon}</span>`);
+  nurseryObjects.innerHTML=cells.join("");
+
+  $("nursery-next-btn").textContent=
+    count===nurseryLearningEnd ? "🎉 خلصنا الأرقام" : "التالي ➜";
+
+  playNurseryCounting(countingWords[count]);
+}
+
+let nurseryArabicVoice=null;
+let nurseryVoicesReady=false;
+
+function pickNurseryArabicVoice(){
+  if(!window.speechSynthesis) return null;
+  const voices=window.speechSynthesis.getVoices();
+  nurseryArabicVoice=
+    voices.find(v=>/^ar-EG$/i.test(v.lang)) ||
+    voices.find(v=>/^ar(-|_)/i.test(v.lang)) ||
+    voices.find(v=>/arabic|عربي/i.test(v.name)) ||
+    null;
+  nurseryVoicesReady=voices.length>0;
+  return nurseryArabicVoice;
+}
+
+if(window.speechSynthesis){
+  pickNurseryArabicVoice();
+  window.speechSynthesis.addEventListener("voiceschanged",pickNurseryArabicVoice);
+}
+
+function playNurseryCounting(word){
+  if(!window.speechSynthesis || !word) return;
+
+  const speak=()=>{
+    window.speechSynthesis.cancel();
+
+    const utterance=new SpeechSynthesisUtterance(word);
+    utterance.lang="ar-EG";
+    utterance.rate=0.76;
+    utterance.pitch=1.32;
+    utterance.volume=1;
+
+    const voice=pickNurseryArabicVoice();
+    if(voice) utterance.voice=voice;
+
+    window.speechSynthesis.resume();
+    window.speechSynthesis.speak(utterance);
+  };
+
+  // أول محاولة تكون فورًا مع تغيير الرقم، ثم نعيد المحاولة لو أصوات الجهاز لم تكن جاهزة بعد.
+  speak();
+  if(!nurseryVoicesReady){
+    setTimeout(()=>{
+      if(!window.speechSynthesis.speaking) speak();
+    },180);
+  }
+}
+
+$("nursery-next-btn").addEventListener("click",()=>{
+
+  if(nurseryNumber<nurseryLearningEnd){
+    nurseryNumber++;
+    renderNurseryNumber();
+  }
+  else{
+    nurseryLessonScreen.classList.add("hidden");
+    nurseryAfterLearningScreen.classList.remove("hidden");
+    $("nursery-after-learning-screen").querySelector("h2").textContent=
+      nurseryLearningMode==="nursery11" ? "برافو يا بطل! 🎉" : "برافو يا بطل! 🎉";
+    $("nursery-after-learning-screen").querySelector(".screen-subtitle").textContent=
+      nurseryLearningMode==="nursery11"
+        ? "خلصت تعلم الأرقام من ١١ لـ ٢٠ 👏 جاهز نلعب؟"
+        : "خلصت تعلم الأرقام 👏 جاهز نلعب؟";
+  }
+
+});
+
+$("nursery-lesson-back").addEventListener("click",()=>{
+
+  nurseryLessonScreen.classList.add("hidden");
+  ageScreen.classList.remove("hidden");
+
+});
+
+$("nursery-after-learning-back").addEventListener("click",()=>{
+  nurseryAfterLearningScreen.classList.add("hidden");
+  ageScreen.classList.remove("hidden");
+});
+
+$("nursery-return-sections").addEventListener("click",()=>{
+  nurseryAfterLearningScreen.classList.add("hidden");
+  ageScreen.classList.remove("hidden");
+});
+
+$("nursery-start-game").addEventListener("click",()=>{
+  gameMode=nurseryLearningMode;
+  currentAge=nurseryLearningMode;
+  nurseryAfterLearningScreen.classList.add("hidden");
+  startGame();
+});
+
+/* =====================================================
+   BACK
+   ===================================================== */
+
+$("mental-back").addEventListener("click",()=>{
+
+  mentalScreen.classList.add("hidden");
+  modeScreen.classList.remove("hidden");
+
+});
+
+$("mental-level-back").addEventListener("click",()=>{
+
+  mentalLevelScreen.classList.add("hidden");
+  mentalScreen.classList.remove("hidden");
+
+});
+
+/* ===== رجوع من قاعدة الخمسة ===== */
+
+$("five-rules-back").addEventListener("click",()=>{
+
+  fiveRulesScreen.classList.add("hidden");
+  mentalScreen.classList.remove("hidden");
+
+});
+
+$("five-level-back").addEventListener("click",()=>{
+  fiveLevelScreen.classList.add("hidden");
+  fiveRulesScreen.classList.remove("hidden");
+
+});
+
+$("general-back").addEventListener("click",()=>{
+
+  generalSectionsScreen.classList.add("hidden");
+  modeScreen.classList.remove("hidden");
+
+});
+
+$("age-back").addEventListener("click",()=>{
+
+  ageScreen.classList.add("hidden");
+  modeScreen.classList.remove("hidden");
+
+});
+
+/* =====================================================
+   EXIT
+   ===================================================== */
+
+$("exit-btn").addEventListener(
+  "click",
+  goHome
+);
+
+/* =====================================================
+   RETRY
+   ===================================================== */
+
+$("retry-btn").addEventListener("click",()=>{
+
+  gameOverScreen.classList.add("hidden");
+
+  startGame();
+
+});
+
+$("home-btn").addEventListener("click",()=>{
+  gameOverScreen.classList.add("hidden");
+  if(gameMode==="general"){
+    gameScreen.classList.add("hidden");
+    generalSectionsScreen.classList.remove("hidden");
+  }
+  else{
+    goHome();
+  }
+});
+
+/* =====================================================
+   NEXT GENERAL
+   ===================================================== */
+
+$("next-level-btn").addEventListener("click",()=>{
+
+  // إعادة نفس المستوى ونفس الصعوبة بأسئلة جديدة
+  levelCompleteScreen.classList.add("hidden");
+
+  startGame();
+
+});
+
+$("level-home-btn").addEventListener("click",()=>{
+
+  gameRunning=false;
+  clearInterval(timerInterval);
+
+  levelCompleteScreen.classList.add("hidden");
+  gameScreen.classList.add("hidden");
+
+  // الروضة ترجع لشاشة البداية، والعامة ترجع لاختيارات العامة
+  if(gameMode==="nursery" || gameMode==="nursery11") {
+    goHome();
+  }
+  else {
+    generalSectionsScreen.classList.remove("hidden");
+  }
+
+});
+
+/* =====================================================
+   NEXT MENTAL
+   ===================================================== */
+
+$("next-mental-level-btn").addEventListener("click",()=>{
+
+  mentalLevelCompleteScreen.classList.add("hidden");
+
+  if(mentalLevel<3){
+
+    mentalLevel++;
+
+    startGame();
+
+  }
+  else{
+
+    goHome();
+
+  }
+
+});
+
+$("mental-level-home-btn").addEventListener(
+  "click",
+  goHome
+);
+
+/* =====================================================
+   RESIZE
+   ===================================================== */
+
+window.addEventListener("resize",()=>{
+
+  if(gameRunning){
+    updateCamera();
+  }
+
+});
+
+})();
+</script>
+
+</body>
+</html>
