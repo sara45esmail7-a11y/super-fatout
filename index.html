@@ -3454,7 +3454,9 @@ if(splashScreenElement){
    ===================================================== */
 
 function startGame(){
-
+if(typeof gtag === "function"){
+  gtag("event","game_start");
+}
   stopIntroMusic();
 
   clearInterval(timerInterval);
