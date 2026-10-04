@@ -1,21 +1,25 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
- <!-- Google tag (gtag.js) -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سوبر فطوط</title>
+
+<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TN45PEP7RK"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-TN45PEP7RK');
-</script> 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>سوبر فطوط</title>
+</script>
+
+<!-- App icons / PWA -->
 <link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" href="icon-512.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
+
 <style>
 *{box-sizing:border-box;}
 
@@ -1599,6 +1603,173 @@ body{
 }
 
 </style>
+
+<style>
+/* ===== تكبير واجهة اللعبة بالكامل ===== */
+@media (max-width: 520px){
+  #game-container{
+    width:100vw;
+    height:100dvh;
+    max-height:100dvh;
+    transform:none;
+    border:0;
+    border-radius:0;
+    box-shadow:none;
+  }
+
+  .screen{
+    padding:24px 20px;
+  }
+
+  #mode-screen{
+    padding-top:34px;
+  }
+
+  .brand-title{
+    font-size:46px;
+  }
+
+  #mode-screen h2{
+    margin:20px 0;
+    font-size:24px;
+  }
+
+  .menu-btn{
+    width:min(92%,370px);
+    padding:18px 20px;
+    margin:8px 0;
+    border-radius:20px;
+    font-size:19px;
+  }
+
+  .menu-btn small{
+    font-size:14px;
+    margin-top:5px;
+  }
+
+  .mascot-main{
+    margin-top:24px;
+    font-size:68px;
+  }
+
+  .back-btn{
+    padding:11px 16px;
+    border-radius:14px;
+    font-size:16px;
+  }
+
+  .screen-subtitle{
+    font-size:16px;
+  }
+
+  .nursery-sections-grid{
+    max-width:340px;
+    gap:18px;
+    margin-top:16px;
+  }
+
+  .nursery-section-btn{
+    max-width:330px;
+    min-height:100px;
+    border-radius:24px;
+  }
+
+  .nursery-section-btn span{
+    font-size:36px;
+  }
+
+  .nursery-section-btn strong{
+    font-size:20px;
+  }
+
+  .five-rules-grid{
+    max-width:340px;
+    gap:12px;
+  }
+
+  .five-rule-btn{
+    height:96px;
+    border-radius:18px;
+    padding:8px;
+  }
+
+  .five-rule-btn span{
+    font-size:29px;
+  }
+
+  .five-rule-btn strong{
+    font-size:15px;
+  }
+
+  .general-level-grid{
+    max-width:370px;
+    gap:14px;
+    margin-top:14px;
+  }
+
+  .general-level-card{
+    border-radius:21px;
+    padding:14px;
+  }
+
+  .general-level-title{
+    font-size:21px;
+  }
+
+  .general-level-age{
+    font-size:15px;
+    margin-bottom:10px;
+  }
+
+  .general-difficulty-row{
+    gap:8px;
+  }
+
+  .general-difficulty-btn{
+    padding:13px 5px;
+    border-radius:14px;
+    font-size:15px;
+  }
+
+  .nursery-lesson-screen{
+    padding:18px;
+  }
+
+  .nursery-lesson-title{
+    font-size:25px;
+  }
+
+  .nursery-lesson-subtitle{
+    font-size:16px;
+  }
+
+  .nursery-counter{
+    padding:9px 12px;
+    font-size:15px;
+  }
+
+  .result-card{
+    max-width:370px;
+    padding:28px 22px;
+    border-radius:26px;
+  }
+
+  .success-icon,#result-icon{
+    font-size:66px;
+  }
+
+  .result-card h2{
+    font-size:25px;
+  }
+
+  .result-btn{
+    padding:15px;
+    border-radius:16px;
+    font-size:18px;
+  }
+}
+</style>
+
 </head>
 
 <body>
