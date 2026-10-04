@@ -1,21 +1,10 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-TN45PEP7RK"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-
-  gtag('js', new Date());
-  gtag('config', 'G-TN45PEP7RK');
-</script>
-
-<link rel="manifest" href="manifest.json">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>سوبر فطوط</title>
+
 <style>
 *{box-sizing:border-box;}
 
@@ -40,17 +29,17 @@ body{
 
 #game-container{
   position:relative;
-  width:min(94vw,390px);
-  height:min(90dvh,760px);
-  max-height:calc(100dvh - 20px);
-  transform:none;
+  width:min(100vw,460px);
+  height:min(94dvh,800px);
+  max-height:calc(100dvh - 12px);
+  transform:translateY(-12px);
   overflow:hidden;
   border:4px solid #31e1ff;
   border-radius:22px;
   background:#0751a0;
   box-shadow:
     0 0 30px rgba(38,222,255,.45),
-    inset 0 0 30px rgba(0,0,0,.25);
+    inset 0 -22px 30px rgba(0,0,0,.25);
 }
 
 .screen{
@@ -82,7 +71,7 @@ body{
 
 .splash-title{
   position:absolute;
-  top:28px;
+  top:5px;
   left:0;
   right:0;
   margin:0;
@@ -167,7 +156,7 @@ body{
 @keyframes crackLines{0%{opacity:0;transform:scale(.2);}35%{opacity:1;transform:scale(1);}100%{opacity:0;transform:scale(1.08);}}
 @keyframes glassBurst{0%{opacity:0;}18%{opacity:1;}55%{opacity:1;}100%{opacity:0;}}
 
-.splash-title{ }
+.splash-title{ transform:translateY(-38px); }
 @keyframes splashTitleIn{from{opacity:0;transform:translateY(-20px) scale(.65) rotate(-2deg);}to{opacity:1;transform:translateY(0) scale(1) rotate(0);}}
 
 .splash-start-btn{
@@ -190,7 +179,7 @@ body{
 }
 .splash-start-btn:active{transform:translateY(5px) scale(.96);box-shadow:0 3px 0 #b95c00,0 0 18px rgba(255,213,47,.5);}
 @keyframes splashStartIn{from{opacity:0;transform:translateY(18px) scale(.8);}to{opacity:1;transform:translateY(0) scale(1);}}
-.splash-credit{position:absolute;bottom:24px;color:rgba(255,255,255,.9);font-size:13px;font-weight:bold;direction:ltr;opacity:0;animation:splashCreditIn .45s ease-out 3.15s forwards;z-index:45;}
+.splash-credit{position:absolute;bottom:2px;color:rgba(255,255,255,.9);font-size:13px;font-weight:bold;direction:ltr;opacity:0;animation:splashCreditIn .45s ease-out 3.15s forwards;z-index:45;}
 @keyframes splashCreditIn{from{opacity:0;transform:translateY(7px);}to{opacity:1;transform:translateY(0);}}
 
 #mode-screen{
@@ -221,7 +210,7 @@ body{
   padding:14px 18px;
   margin:6px 0;
   color:#fff;
-  font-size:18px;
+  font-size:15px;
   font-weight:900;
   cursor:pointer;
   box-shadow:
@@ -508,6 +497,13 @@ body{
 .nursery-after-learning-buttons{display:flex;flex-direction:column;gap:12px;width:100%;max-width:300px;margin:22px auto 0;}
 
 .nursery-game-mode #question-box{min-height:100px;height:auto;padding:7px 8px;top:8px;width:calc(100% - 103px);max-width:225px;border-radius:15px;}
+
+/* الروضة: نسيب مسافة ثابتة بين صندوق السؤال وأول بسطة،
+   ونخلي شعر فطوط فوق أي طبقة واجهة لو وصل قريب من الصندوق. */
+#game-screen.nursery-game-mode #game-stage{
+  top:158px;
+}
+
 .nursery-game-mode .question-title{font-size:10px;margin-bottom:2px;}
 .nursery-game-mode #question-text{font-size:22px;line-height:1.05;}
 .nursery-game-equation{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px;font-size:clamp(20px,5vw,29px);line-height:1;}
@@ -596,19 +592,19 @@ body{
 #timer-clock{
   position:absolute;
   top:17px;
-  left:14px;
+  left:6px;
   z-index:80;
-  min-width:72px;
-  height:43px;
+  min-width:50px;
+  height:32px;
   display:flex;
   align-items:center;
   justify-content:center;
   gap:4px;
-  padding:0 10px;
-  border-radius:15px;
+  padding:0 5px;
+  border-radius:10px;
   background:linear-gradient(135deg,#174e91,#092e60);
   border:3px solid #50e7ff;
-  font-size:18px;
+  font-size:15px;
   font-weight:900;
 }
 
@@ -1239,13 +1235,17 @@ body{
 @media(max-height:680px){
 
   #game-container{
-    height:min(92dvh,700px);
-    max-height:calc(100dvh - 16px);
+    height:min(94dvh,760px);
+    max-height:calc(100dvh - 10px);
     transform:none;
   }
 
   #game-stage{
     top:140px;
+  }
+
+  #game-screen.nursery-game-mode #game-stage{
+    top:152px;
   }
 
   .step{
@@ -1401,11 +1401,12 @@ body{
 @keyframes introBadgeIn{from{opacity:0;transform:translateY(-12px) scale(.9)}to{opacity:1;transform:none}}
 
 #splash-screen .splash-title{
-  position:relative;
-  top:auto;
-  left:auto;
-  right:auto;
-  margin:10px 0 0;
+  position:absolute;
+  top:24px;
+  left:0;
+  right:0;
+  margin:0;
+  transform:translateY(-18px);
   font-size:clamp(43px,14vw,64px);
   line-height:1;
   font-weight:1000;
@@ -1483,9 +1484,11 @@ body{
 @keyframes introButtonPulse{50%{transform:translateY(-2px) scale(1.025);box-shadow:0 9px 0 #b95c00,0 0 34px rgba(255,213,47,.58)}}
 
 #splash-screen .splash-credit{
-  position:relative;
-  bottom:auto;
-  margin-top:12px;
+  position:absolute;
+  bottom:4px;
+  left:0;
+  right:0;
+  margin:0;
   color:rgba(255,255,255,.72);
   font-size:12px;
   font-weight:800;
@@ -1993,6 +1996,8 @@ body{
       سكورك:
       <span>0</span>
     </p>
+
+    <p id="nursery-time-message" class="screen-subtitle" style="display:none;margin:6px 0 12px;font-weight:900;"></p>
 
     <button id="next-level-btn" class="result-btn retry-btn">
       🚀 المستوى التالي
@@ -2740,31 +2745,38 @@ function revealNextPlatforms(){
 
     const playerOnLeft = fatoutCenter < width/2;
 
+    const nurseryMode =
+      gameMode==="nursery" || gameMode==="nursery11";
+
+    const y1 = nurseryMode ? 92 : 108;
+    const y2 = nurseryMode ? 148 : 174;
+    const y3 = nurseryMode ? 202 : 244;
+
     layouts = playerOnLeft ? [
       {
         right:12,
-        bottom:currentPlatformBottom+88
+        bottom:currentPlatformBottom+y1
       },
       {
         left:12,
-        bottom:currentPlatformBottom+154
+        bottom:currentPlatformBottom+y2
       },
       {
         right:46,
-        bottom:currentPlatformBottom+224
+        bottom:currentPlatformBottom+y3
       }
     ] : [
       {
         left:12,
-        bottom:currentPlatformBottom+88
+        bottom:currentPlatformBottom+y1
       },
       {
         right:12,
-        bottom:currentPlatformBottom+154
+        bottom:currentPlatformBottom+y2
       },
       {
         left:46,
-        bottom:currentPlatformBottom+224
+        bottom:currentPlatformBottom+y3
       }
     ];
   }
@@ -2797,7 +2809,9 @@ function updateCamera(){
   const stageHeight=
     gameStage.clientHeight;
 
-  const target=stageHeight*.58;
+  const target=(gameMode==="nursery"||gameMode==="nursery11")
+    ? stageHeight*.68
+    : stageHeight*.58;
 
   const neededOffset=
     Math.max(
@@ -3007,20 +3021,53 @@ function chooseAnswer(step){
 function startTimer(){
   clearInterval(timerInterval);
 
-  if(gameMode === "general" || gameMode === "nursery" || gameMode === "nursery11"){
+  /* الرياضيات العامة: عدّ تنازلي من 30 ثانية.
+     الروضة فقط تظل عدًّا تصاعديًا من 0. */
+  if(gameMode === "nursery" || gameMode === "nursery11"){
     if(!gameStartTime) gameStartTime=Date.now();
     if(timerClock) timerClock.classList.remove("danger");
 
     const updateElapsed=()=>{
       if(!gameRunning) return;
       const elapsed=Math.floor((Date.now()-gameStartTime)/1000);
-      if(timerValue) timerValue.textContent = `${elapsed} ث`;
-      initAudio();
-      playTick();
+      const minutes=Math.floor(elapsed/60);
+      const seconds=elapsed%60;
+      const timeText = minutes > 0 ? `${minutes} د ${seconds} ث` : `${seconds} ث`;
+      if(timerValue) timerValue.textContent = timeText;
+      if(elapsed > 0){
+        playTick();
+      }
     };
 
     updateElapsed();
     timerInterval=setInterval(updateElapsed,1000);
+    return;
+  }
+
+  if(gameMode === "general"){
+    timer = 30;
+    if(timerValue) timerValue.textContent = timer;
+    if(timerClock) timerClock.classList.remove("danger");
+
+    timerInterval = setInterval(() => {
+      if(!gameRunning) return;
+      timer--;
+      if(timerValue) timerValue.textContent = timer;
+
+      if(timer > 3){
+        playTick();
+      }
+
+      if(timer <= 3){
+        if(timerClock) timerClock.classList.add("danger");
+        playDanger();
+      }
+
+      if(timer <= 0){
+        clearInterval(timerInterval);
+        endGame();
+      }
+    },1000);
     return;
   }
 
@@ -3164,18 +3211,23 @@ function finishNurseryGame(){
   const nurseryScore=levelCompleteScreen.querySelector("#level-score span");
   if(nurseryScore) nurseryScore.textContent=score;
 
+  // الروضة: بعد 10 أسئلة فقط يظهر "العب تاني" وليس مستوى جديد
+  $("next-level-btn").textContent="🔄 العب تاني";
+  $("level-home-btn").textContent="↩️ رجوع";
+
   gameScreen.classList.add("hidden");
   levelCompleteScreen.classList.remove("hidden");
 
   const title=levelCompleteScreen.querySelector("h2");
-  const subtitle=levelCompleteScreen.querySelector(".screen-subtitle");
+  const nurseryTimeMessage=$("nursery-time-message");
   if(title) title.textContent="برافو يا بطل! 🎉";
-  if(subtitle){
+  if(nurseryTimeMessage){
     const totalTime=Math.floor((Date.now()-gameStartTime)/1000);
     const minutes=Math.floor(totalTime/60);
     const seconds=totalTime%60;
     const timeText=minutes>0 ? `${minutes} دقيقة و ${seconds} ثانية` : `${seconds} ثانية`;
-    subtitle.textContent=`خلصت 10 أسئلة في ${timeText}! ⭐`;
+    nurseryTimeMessage.textContent=`⏱️ حلّيت 10 أسئلة في ${timeText}! ⭐`;
+    nurseryTimeMessage.style.display="block";
   }
 }
 
@@ -3277,7 +3329,7 @@ function finishMentalLevel(){
   $("next-mental-level-btn").textContent=
     mentalLevel<3
       ?`🚀 المستوى ${mentalLevel+1}`
-      :"🏠 إنهاء";
+      :"🔄 العب تاني";
 
   mentalLevelCompleteScreen.classList.remove(
     "hidden"
@@ -3336,7 +3388,8 @@ function finishGeneralLevel(){
 }
 
 /* =====================================================
-   INTRO MUSIC - SPLASH ONLY
+   INTRO SPACE AMBIENT - SPLASH ONLY
+   هادي وفخم: فضاء عميق + لمعات نجوم قليلة
    ===================================================== */
 let introMusicStarted=false;
 let introAudioContext=null;
@@ -3349,63 +3402,46 @@ function startIntroMusic(){
 
   try{
     introAudioContext=new (window.AudioContext||window.webkitAudioContext)();
-    if(introAudioContext.state==="suspended") introAudioContext.resume();
-
-    const melody=[261.63,329.63,392.00,523.25,587.33,659.25,783.99,659.25,587.33,523.25,392.00,329.63];
-    const bass=[130.81,164.81,196.00,220.00];
-    let i=0;
-
-    introMasterGain=introAudioContext.createGain();
-    introMasterGain.gain.value=1.0;
-    introMasterGain.connect(introAudioContext.destination);
-
-    const playIntroNote=()=>{
+    const ctx=introAudioContext;
+    const beginMusic=()=>{
       if(!introAudioContext)return;
-      const now=introAudioContext.currentTime;
+      introMasterGain=ctx.createGain();
+      introMasterGain.gain.value=.16;
+      introMasterGain.connect(ctx.destination);
 
-      const osc=introAudioContext.createOscillator();
-      const gain=introAudioContext.createGain();
-      osc.type="triangle";
-      osc.frequency.value=melody[i%melody.length];
-      gain.gain.setValueAtTime(0.0001,now);
-      gain.gain.exponentialRampToValueAtTime(0.30,now+0.04);
-      gain.gain.exponentialRampToValueAtTime(0.0001,now+0.52);
-      osc.connect(gain);
-      gain.connect(introMasterGain);
-      osc.start(now);
-      osc.stop(now+0.55);
+      const notes=[523.25,659.25,783.99,659.25,587.33,698.46,880,698.46];
+      let index=0;
+      const playNote=()=>{
+        if(!introAudioContext)return;
+        const now=ctx.currentTime;
+        const osc=ctx.createOscillator();
+        const gain=ctx.createGain();
+        osc.type='sine';
+        osc.frequency.setValueAtTime(notes[index%notes.length],now);
+        gain.gain.setValueAtTime(.0001,now);
+        gain.gain.exponentialRampToValueAtTime(.055,now+.05);
+        gain.gain.exponentialRampToValueAtTime(.0001,now+.55);
+        osc.connect(gain);
+        gain.connect(introMasterGain);
+        osc.start(now);
+        osc.stop(now+.58);
+        index++;
+      };
 
-      if(i%3===0){
-        const bassOsc=introAudioContext.createOscillator();
-        const bassGain=introAudioContext.createGain();
-        bassOsc.type="sawtooth";
-        bassOsc.frequency.value=bass[(i/3|0)%bass.length];
-        bassGain.gain.setValueAtTime(0.0001,now);
-        bassGain.gain.exponentialRampToValueAtTime(0.14,now+0.03);
-        bassGain.gain.exponentialRampToValueAtTime(0.0001,now+0.65);
-        bassOsc.connect(bassGain);
-        bassGain.connect(introMasterGain);
-        bassOsc.start(now);
-        bassOsc.stop(now+0.68);
-      }
-      i++;
+      playNote();
+      introMusicTimer=setInterval(playNote,620);
     };
 
-    playIntroNote();
-    introMusicTimer=setInterval(playIntroNote,480);
-  }catch(e){}
+    if(ctx.state==='suspended')ctx.resume().then(beginMusic);
+    else beginMusic();
+  }catch(e){
+    introMusicStarted=false;
+  }
 }
 
 function stopIntroMusic(){
-  if(introMusicTimer){
-    clearInterval(introMusicTimer);
-    introMusicTimer=null;
-  }
-  if(introAudioContext){
-    try{introAudioContext.close();}catch(e){}
-    introAudioContext=null;
-    introMasterGain=null;
-  }
+  if(introMusicTimer){clearInterval(introMusicTimer);introMusicTimer=null;}
+  if(introAudioContext){try{introAudioContext.close();}catch(e){} introAudioContext=null; introMasterGain=null;}
   introMusicStarted=false;
 }
 
@@ -3414,39 +3450,63 @@ function playEnterVortexSound(){
   if(!audioContext)return;
 
   const now=audioContext.currentTime;
-  const osc=audioContext.createOscillator();
-  const gain=audioContext.createGain();
+
+  /* Soft space-portal whoosh: airy sweep inward, then one tiny star shimmer. */
+  const bufferSize=audioContext.sampleRate*0.9;
+  const buffer=audioContext.createBuffer(1,bufferSize,audioContext.sampleRate);
+  const data=buffer.getChannelData(0);
+  for(let i=0;i<bufferSize;i++){
+    const t=i/bufferSize;
+    data[i]=(Math.random()*2-1) * (1-t) * (0.7+0.3*Math.sin(t*Math.PI));
+  }
+
+  const noise=audioContext.createBufferSource();
   const filter=audioContext.createBiquadFilter();
+  const gain=audioContext.createGain();
+  const pan=audioContext.createStereoPanner ? audioContext.createStereoPanner() : null;
 
-  osc.type="sine";
-  osc.frequency.setValueAtTime(900,now);
-  osc.frequency.exponentialRampToValueAtTime(120,now+0.42);
-  osc.frequency.exponentialRampToValueAtTime(620,now+0.78);
+  noise.buffer=buffer;
+  filter.type="bandpass";
+  filter.frequency.setValueAtTime(420,now);
+  filter.frequency.exponentialRampToValueAtTime(1500,now+0.30);
+  filter.frequency.exponentialRampToValueAtTime(180,now+0.82);
+  filter.Q.value=0.65;
 
-  filter.type="lowpass";
-  filter.frequency.setValueAtTime(1800,now);
-  filter.frequency.exponentialRampToValueAtTime(500,now+0.78);
+  gain.gain.setValueAtTime(0.0001,now);
+  gain.gain.exponentialRampToValueAtTime(0.11,now+0.22);
+  gain.gain.exponentialRampToValueAtTime(0.0001,now+0.86);
 
-  gain.gain.setValueAtTime(.0001,now);
-  gain.gain.exponentialRampToValueAtTime(.16,now+.08);
-  gain.gain.exponentialRampToValueAtTime(.0001,now+.82);
-
-  osc.connect(filter);
+  noise.connect(filter);
   filter.connect(gain);
-  gain.connect(audioContext.destination);
-  osc.start(now);
-  osc.stop(now+.85);
+  if(pan){
+    pan.pan.setValueAtTime(-0.25,now);
+    pan.pan.linearRampToValueAtTime(0.25,now+0.42);
+    pan.pan.linearRampToValueAtTime(0,now+0.86);
+    gain.connect(pan);
+    pan.connect(audioContext.destination);
+  }else{
+    gain.connect(audioContext.destination);
+  }
 
-  setTimeout(()=>tone(260,.16,"triangle",.045),300);
-  setTimeout(()=>tone(520,.22,"sine",.055),470);
+  noise.start(now);
+  noise.stop(now+0.88);
+
+  /* One soft star sparkle at the end — no melody, no harsh tone. */
+  setTimeout(()=>tone(1046,.12,"sine",.018),650);
 }
+
+
+/* Try to start automatically when the splash opens.
+   Mobile browsers may block autoplay; the first touch then unlocks it. */
+window.addEventListener("load",()=>{
+  if(!splashScreen.classList.contains("hidden")) startIntroMusic();
+});
 
 const splashScreenElement=document.getElementById("splash-screen");
 if(splashScreenElement){
-  splashScreenElement.addEventListener("pointerdown",(event)=>{
-    if(event.target.closest("#splash-start-btn"))return;
+  splashScreenElement.addEventListener("pointerdown",()=>{
     startIntroMusic();
-  });
+  },{once:false});
 }
 
 /* =====================================================
@@ -3454,9 +3514,7 @@ if(splashScreenElement){
    ===================================================== */
 
 function startGame(){
-if(typeof gtag === "function"){
-  gtag("event","game_start");
-}
+
   stopIntroMusic();
 
   clearInterval(timerInterval);
@@ -3470,6 +3528,7 @@ if(typeof gtag === "function"){
   gameOverScreen.classList.add("hidden");
   levelCompleteScreen.classList.add("hidden");
   mentalLevelCompleteScreen.classList.add("hidden");
+  if($("nursery-time-message")) $("nursery-time-message").style.display="none";
 
   modeScreen.classList.add("hidden");
   mentalScreen.classList.add("hidden");
@@ -3494,7 +3553,7 @@ if(typeof gtag === "function"){
 
   if(timerValue){
     timerValue.textContent =
-      gameMode==="general" ? "0 ث" : "15";
+      gameMode==="general" ? "30" : "15";
   }
 
   setInitialTower();
@@ -3699,52 +3758,14 @@ function renderNurseryNumber(){
   playNurseryCounting(countingWords[count]);
 }
 
-let nurseryArabicVoice=null;
-let nurseryVoicesReady=false;
-
-function pickNurseryArabicVoice(){
-  if(!window.speechSynthesis) return null;
-  const voices=window.speechSynthesis.getVoices();
-  nurseryArabicVoice=
-    voices.find(v=>/^ar-EG$/i.test(v.lang)) ||
-    voices.find(v=>/^ar(-|_)/i.test(v.lang)) ||
-    voices.find(v=>/arabic|عربي/i.test(v.name)) ||
-    null;
-  nurseryVoicesReady=voices.length>0;
-  return nurseryArabicVoice;
-}
-
-if(window.speechSynthesis){
-  pickNurseryArabicVoice();
-  window.speechSynthesis.addEventListener("voiceschanged",pickNurseryArabicVoice);
-}
-
 function playNurseryCounting(word){
   if(!window.speechSynthesis || !word) return;
-
-  const speak=()=>{
-    window.speechSynthesis.cancel();
-
-    const utterance=new SpeechSynthesisUtterance(word);
-    utterance.lang="ar-EG";
-    utterance.rate=0.76;
-    utterance.pitch=1.32;
-    utterance.volume=1;
-
-    const voice=pickNurseryArabicVoice();
-    if(voice) utterance.voice=voice;
-
-    window.speechSynthesis.resume();
-    window.speechSynthesis.speak(utterance);
-  };
-
-  // أول محاولة تكون فورًا مع تغيير الرقم، ثم نعيد المحاولة لو أصوات الجهاز لم تكن جاهزة بعد.
-  speak();
-  if(!nurseryVoicesReady){
-    setTimeout(()=>{
-      if(!window.speechSynthesis.speaking) speak();
-    },180);
-  }
+  window.speechSynthesis.cancel();
+  const utterance=new SpeechSynthesisUtterance(word);
+  utterance.lang="ar-EG";
+  utterance.rate=0.72;
+  utterance.pitch=1.15;
+  window.speechSynthesis.speak(utterance);
 }
 
 $("nursery-next-btn").addEventListener("click",()=>{
@@ -3942,12 +3963,6 @@ window.addEventListener("resize",()=>{
 
 })();
 </script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js");
-  });
-}
-</script>
+
 </body>
 </html>
