@@ -5,21 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>سوبر فطوط</title>
 
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-TN45PEP7RK"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-TN45PEP7RK');
-</script>
-
-<!-- App icons / PWA -->
-<link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<link rel="apple-touch-icon" href="icon-192.png">
-
 <style>
 *{box-sizing:border-box;}
 
@@ -47,7 +32,7 @@ body{
   width:min(100vw,460px);
   height:min(94dvh,800px);
   max-height:calc(100dvh - 12px);
-  transform:translateY(-12px);
+  transform:none;
   overflow:hidden;
   border:4px solid #31e1ff;
   border-radius:22px;
@@ -198,6 +183,7 @@ body{
 @keyframes splashCreditIn{from{opacity:0;transform:translateY(7px);}to{opacity:1;transform:translateY(0);}}
 
 #mode-screen{
+  position:absolute;
   background:
     radial-gradient(circle at 50% 20%,#1169bc,transparent 35%),
     linear-gradient(#063d80,#06245a 70%,#07366c);
@@ -217,6 +203,27 @@ body{
   margin:15px 0;
   font-size:20px;
 }
+
+
+.language-icon-btn{
+  position:absolute;
+  top:12px;
+  right:12px;
+  width:44px;
+  height:44px;
+  padding:0;
+  border:none;
+  border-radius:50%;
+  background:rgba(255,255,255,.12);
+  color:#fff;
+  font-size:25px;
+  line-height:44px;
+  text-align:center;
+  cursor:pointer;
+  z-index:20;
+  box-shadow:0 3px 10px rgba(0,0,0,.25);
+}
+.language-icon-btn:active{transform:scale(.94);}
 
 .menu-btn{
   width:min(100%,310px);
@@ -264,6 +271,15 @@ body{
   margin-top:18px;
   font-size:55px;
 }
+
+.language-choice{
+  max-width:280px;
+}
+
+#language-screen h2{
+  margin-top:26px;
+}
+
 
 .back-btn{
   align-self:flex-start;
@@ -509,7 +525,8 @@ body{
   width:min(100%,280px);
 }
 
-.nursery-after-learning-buttons{display:flex;flex-direction:column;gap:12px;width:100%;max-width:300px;margin:22px auto 0;}
+.nursery-after-learning-buttons{display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:300px;margin:22px auto 0;}
+.nursery-after-learning-buttons .menu-btn{align-self:center;}
 
 .nursery-game-mode #question-box{min-height:100px;height:auto;padding:7px 8px;top:8px;width:calc(100% - 103px);max-width:225px;border-radius:15px;}
 
@@ -594,14 +611,159 @@ body{
   background:linear-gradient(135deg,#38dc76,#079d55);
 }
 
+/* ===== قاعدة العشرة — 5 مجموعات زي قاعدة الخمسة ===== */
+.ten-rules-grid{
+  width:100%;
+  max-width:300px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin:8px auto 10px;
+}
+.ten-rule-btn{
+  width:100%;
+  min-height:72px;
+  border:none;
+  border-radius:15px;
+  color:#fff;
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  box-shadow:0 4px 0 rgba(0,0,0,.24),0 0 10px rgba(255,255,255,.10);
+  transition:.15s;
+  padding:6px;
+}
+.ten-rule-btn span{font-size:23px;line-height:1}
+.ten-rule-btn strong{font-size:13px;line-height:1.2;text-align:center}
+.ten-rule-btn:active{transform:translateY(3px)}
+.ten-rbasic{background:linear-gradient(135deg,#7c5cff,#4b2fb8)}
+.ten-r91{background:linear-gradient(135deg,#ff6b6b,#d83232)}
+.ten-r82{background:linear-gradient(135deg,#ff9f43,#e86b00)}
+.ten-r73{background:linear-gradient(135deg,#ffd43b,#e0a800)}
+.ten-r64{background:linear-gradient(135deg,#55d66a,#1b9d45)}
+.ten-r5{background:linear-gradient(135deg,#38a9ff,#2360d8)}
+.rule-explanation-box{width:100%;max-width:330px;margin:4px auto 0;padding:12px 12px 13px;border-radius:18px;background:rgba(3,28,62,.72);border:2px solid rgba(255,255,255,.16);box-shadow:0 7px 18px rgba(0,0,0,.22);}
+.rule-explanation-title{text-align:center;font-size:16px;font-weight:900;color:#ffd83d;margin-bottom:8px}
+.rule-explanation-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;font-size:14px;font-weight:800;text-align:center;line-height:1.25}
+.rule-explanation-grid div{padding:5px 3px;border-radius:9px;background:rgba(255,255,255,.07)}
+.ten-level-btn small{display:block;font-size:12px;margin-top:3px}
+
+.rule-formula-box{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  width:fit-content;
+  max-width:94%;
+  margin:7px auto 0;
+  padding:7px 14px 9px;
+  text-align:center;
+  background:linear-gradient(145deg,rgba(7,35,78,.97),rgba(3,20,48,.98));
+  border:1.5px solid rgba(104,220,255,.78);
+  border-radius:9px;
+  box-shadow:0 0 7px rgba(104,220,255,.42), inset 0 0 8px rgba(255,255,255,.04);
+}
+/* نجوم صغيرة متحركة في خلفية صندوق القاعدة فقط */
+.rule-formula-box::before{
+  content:"";
+  position:absolute;
+  inset:-35px 0 -55px;
+  z-index:-1;
+  pointer-events:none;
+  opacity:.72;
+  background-image:
+    radial-gradient(circle at 12px 12px,rgba(255,255,255,.95) 0 1px,transparent 1.7px),
+    radial-gradient(circle at 43px 36px,rgba(104,220,255,.9) 0 1px,transparent 1.7px),
+    radial-gradient(circle at 72px 18px,rgba(255,255,255,.7) 0 1.1px,transparent 1.8px);
+  background-size:82px 82px,97px 97px,121px 121px;
+  background-position:0 -10px,25px -45px,48px -25px;
+  animation:ruleFormulaStarsDrop 6s linear infinite;
+}
+@keyframes ruleFormulaStarsDrop{
+  from{background-position:0 -10px,25px -45px,48px -25px;}
+  to{background-position:0 72px,25px 52px,48px 96px;}
+}
+.rule-formula-title{
+  display:none;
+}
+.rule-formula-grid{
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-items:center;
+  gap:5px 8px;
+}
+.ten-level-screen .rule-formula-grid{
+  flex-wrap:nowrap !important;
+  display:flex !important;
+  flex-direction:row !important;
+  gap:4px !important;
+  justify-content:center !important;
+  align-items:center !important;
+  width:max-content !important;
+  max-width:none !important;
+  white-space:nowrap !important;
+}
+.ten-level-screen .rule-formula-box{
+  width:min(96%,430px) !important;
+  max-width:96% !important;
+  padding:12px 16px 14px !important;
+  border-radius:14px !important;
+}
+.ten-level-screen .rule-formula{
+  flex:0 0 auto !important;
+  font-size:12px !important;
+  padding:4px 6px !important;
+  white-space:nowrap !important;
+}
+.rule-formula{
+  padding:2px 6px;
+  background:rgba(104,220,255,.92);
+  color:#06264d;
+  border:1px solid rgba(205,248,255,.72);
+  border-radius:6px;
+  font-size:12px;
+  line-height:1.1;
+  font-weight:1000;
+  direction:ltr;
+  white-space:nowrap;
+  box-shadow:0 1px 4px rgba(0,0,0,.3),0 0 5px rgba(104,220,255,.28);
+}
+@media (prefers-reduced-motion: reduce){
+  .rule-formula-box::before{animation:none;}
+}
+
 /* ================= GAME ================= */
 
 #game-screen{
   position:absolute;
   inset:0;
   overflow:hidden;
-  background:
-    radial-gradient(circle at 50% 15%,#1784dc 0%,#0870c7 25%,#0753a4 55%,#063b7b 100%);
+  background-color:#03162f;
+  background-image:
+    radial-gradient(circle,rgba(255,255,255,.9) 0 1px,transparent 1.5px),
+    radial-gradient(circle,rgba(104,220,255,.8) 0 1px,transparent 1.5px),
+    radial-gradient(circle,rgba(255,255,255,.55) 0 1.2px,transparent 1.8px),
+    radial-gradient(circle at 50% 18%,#164a82 0%,#092b59 42%,#03162f 100%);
+  background-size:55px 55px,83px 83px,127px 127px,100% 100%;
+  background-position:10px 14px,28px 41px,4px 72px,0 0;
+  animation:gameNightStarsMove 10s linear infinite;
+}
+
+@keyframes gameNightStarsMove{
+  from{background-position:10px 14px,28px 41px,4px 72px,0 0;}
+  to{background-position:10px 69px,28px 96px,4px 127px,0 0;}
+}
+
+/* في الجيم: ليل ونجوم فقط، من غير عناصر النهار */
+#game-screen .sun,
+#game-screen .cloud,
+#game-screen .mountain{
+  display:none !important;
 }
 
 #timer-clock{
@@ -1318,10 +1480,9 @@ body{
 
 /* ===== OWNER ===== */
 .owner-credit{
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:10px;
+  position:relative;
+  margin-top:28px;
+  width:100%;
   text-align:center;
   color:rgba(255,255,255,.72);
   font-size:12px;
@@ -1370,7 +1531,7 @@ body{
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  padding:18px 16px 20px;
+  padding:18px 16px 48px;
 }
 
 .intro-stars{
@@ -1500,7 +1661,7 @@ body{
 
 #splash-screen .splash-credit{
   position:absolute;
-  bottom:4px;
+  bottom:10px;
   left:0;
   right:0;
   margin:0;
@@ -1522,6 +1683,30 @@ body{
   #splash-screen .splash-start-btn{margin-top:10px;padding:11px 24px;font-size:19px;min-width:215px;}
   #splash-screen .splash-credit{margin-top:7px;}
 }
+
+/* ===== فطوط أكثر حيوية ===== */
+#fatout:not(.jumping):not(.falling){animation:fatoutIdle .9s ease-in-out infinite alternate;}
+@keyframes fatoutIdle{from{transform:scale(.55) translateY(0) rotate(-1deg)}to{transform:scale(.55) translateY(-3px) rotate(1deg)}}
+#fatout:not(.jumping):not(.falling) .f-arm-left{animation:idleArmL .9s ease-in-out infinite alternate;}
+#fatout:not(.jumping):not(.falling) .f-arm-right{animation:idleArmR .9s ease-in-out infinite alternate;}
+@keyframes idleArmL{from{transform:rotate(4deg)}to{transform:rotate(-7deg)}}
+@keyframes idleArmR{from{transform:rotate(-4deg)}to{transform:rotate(7deg)}}
+#fatout:not(.jumping):not(.falling) .f-hair span{animation:hairBounce .8s ease-in-out infinite alternate;}
+#fatout:not(.jumping):not(.falling) .f-hair span:nth-child(2){animation-delay:.12s}
+#fatout:not(.jumping):not(.falling) .f-hair span:nth-child(3){animation-delay:.22s}
+@keyframes hairBounce{from{transform:rotate(-4deg)}to{transform:rotate(5deg)}}
+#fatout.jumping .f-arm-left{animation:jumpArmL .45s ease-in-out infinite alternate;}
+#fatout.jumping .f-arm-right{animation:jumpArmR .45s ease-in-out infinite alternate;}
+#fatout.jumping .f-leg-left{animation:jumpLegL .45s ease-in-out infinite alternate;}
+#fatout.jumping .f-leg-right{animation:jumpLegR .45s ease-in-out infinite alternate;}
+@keyframes jumpArmL{from{transform:rotate(18deg)}to{transform:rotate(-38deg)}}
+@keyframes jumpArmR{from{transform:rotate(-18deg)}to{transform:rotate(38deg)}}
+@keyframes jumpLegL{from{transform:rotate(4deg)}to{transform:rotate(-18deg)}}
+@keyframes jumpLegR{from{transform:rotate(-4deg)}to{transform:rotate(18deg)}}
+#fatout.fatout-landing{animation:fatoutLanding .28s ease-out;}
+@keyframes fatoutLanding{0%{transform:scale(.55) translateY(-7px)}55%{transform:scale(.58,.50) translateY(2px)}100%{transform:scale(.55) translateY(0)}}
+#fatout.fatout-happy{animation:fatoutHappy .55s ease-in-out 2;}
+@keyframes fatoutHappy{0%,100%{transform:scale(.55) translateY(0) rotate(0)}25%{transform:scale(.55) translateY(-8px) rotate(-5deg)}50%{transform:scale(.55) translateY(0) rotate(5deg)}75%{transform:scale(.55) translateY(-6px) rotate(-3deg)}}
 </style>
 
 <style>
@@ -1607,10 +1792,20 @@ body{
 <style>
 /* ===== تكبير واجهة اللعبة بالكامل ===== */
 @media (max-width: 520px){
+  body{
+    width:100vw;
+    height:100dvh;
+    min-height:100dvh;
+    margin:0;
+    padding:0;
+    display:block;
+  }
+
   #game-container{
     width:100vw;
     height:100dvh;
     max-height:100dvh;
+    margin:0;
     transform:none;
     border:0;
     border-radius:0;
@@ -1622,7 +1817,7 @@ body{
   }
 
   #mode-screen{
-    padding-top:34px;
+    padding-top:58px;
   }
 
   .brand-title{
@@ -1635,11 +1830,11 @@ body{
   }
 
   .menu-btn{
-    width:min(92%,370px);
-    padding:18px 20px;
-    margin:8px 0;
+    width:min(94%,370px);
+    padding:23px 20px;
+    margin:9px 0;
     border-radius:20px;
-    font-size:19px;
+    font-size:22px;
   }
 
   .menu-btn small{
@@ -1770,16 +1965,6 @@ body{
 }
 </style>
 
-
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function () {
-    navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(function (error) {
-      console.warn('Service Worker registration failed:', error);
-    });
-  });
-}
-</script>
 </head>
 
 <body>
@@ -1823,7 +2008,7 @@ if ('serviceWorker' in navigator) {
     <div class="intro-platform" aria-hidden="true"></div>
 
     <button id="splash-start-btn" class="splash-start-btn">🎮 ابدأ المغامرة</button>
-    <div class="splash-credit">© 2026 Sara Ismail</div>
+    <div class="splash-credit no-translate">© 2026 Sara Ismail</div>
   </div>
 </section>
 
@@ -1847,15 +2032,32 @@ if ('serviceWorker' in navigator) {
     📚 الرياضيات العامة
   </button>
 
+  <button class="language-icon-btn" id="btn-language" aria-label="اختيار اللغة" title="">🌐</button>
+
   <div class="mascot-main">👦🏻</div>
-<div class="owner-credit">© 2026 Sara Ismail</div>
+<div class="owner-credit no-translate">© 2026 Sara Ismail</div>
+</section>
+
+<section id="language-screen" class="screen hidden">
+
+  <button class="back-btn" id="language-back">↩️ Back</button>
+
+  <h2>🌐 اللغة</h2>
+  <p class="screen-subtitle">اختار اللغة</p>
+
+  <button class="menu-btn blue-btn language-choice" data-lang="ar">
+    🇪🇬 Arabic
+  </button>
+
+  <button class="menu-btn green-btn language-choice no-translate" data-lang="en">
+    🇬🇧 English
+  </button>
+
 </section>
 
 <section id="mental-screen" class="screen hidden">
 
-  <button class="back-btn" id="mental-back">
-    🏠 الرئيسية
-  </button>
+  <button class="back-btn" id="mental-back">↩️ Back</button>
 
   <h2>الحساب الذهني 🧠</h2>
 
@@ -1869,13 +2071,15 @@ if ('serviceWorker' in navigator) {
     ⭐ قاعدة الخمسة
   </button>
 
+  <button class="menu-btn green-btn" id="btn-section-three">
+    🔟 قاعدة العشرة
+  </button>
+
 </section>
 
 <section id="mental-level-screen" class="screen hidden">
 
-  <button class="back-btn" id="mental-level-back">
-    🏠 رجوع
-  </button>
+  <button class="back-btn" id="mental-level-back">↩️ Back</button>
 
   <h2>قاعدة الأربعة 🔢</h2>
 
@@ -1883,17 +2087,14 @@ if ('serviceWorker' in navigator) {
 
   <button class="menu-btn green-btn mental-level-btn" data-level="1">
     🚀 المستوى 1
-    <small>رقمين رأسيًا</small>
   </button>
 
   <button class="menu-btn blue-btn mental-level-btn" data-level="2">
     🚀 المستوى 2
-    <small>3 أرقام رأسيًا</small>
   </button>
 
   <button class="menu-btn purple-btn mental-level-btn" data-level="3">
     🚀 المستوى 3
-    <small>4 أو 5 أرقام رأسيًا</small>
   </button>
 
 </section>
@@ -1901,7 +2102,7 @@ if ('serviceWorker' in navigator) {
 <!-- ===== قاعدة الخمسة ===== -->
 
 <section id="five-rules-screen" class="screen hidden">
-  <button class="back-btn" id="five-rules-back">🏠 رجوع</button>
+  <button class="back-btn" id="five-rules-back">↩️ Back</button>
   <h2>قاعدة الخمسة ⭐</h2>
   <p class="screen-subtitle">اختار القاعدة يا بطل</p>
   <div class="five-rules-grid">
@@ -1915,33 +2116,60 @@ if ('serviceWorker' in navigator) {
       <span>2️⃣3️⃣</span><strong>قاعدة الثلاثة والاثنين</strong>
     </button>
     <button class="five-rule-btn rule-mixed" data-five-stage="4">
-      <span>🔥</span><strong>تحدي القواعد المركبة</strong>
+      <span>🔥</span><strong>قاعدة الخمسة والخمسة</strong>
     </button>
   </div>
 </section>
 
 <!-- ===== مستويات قواعد الخمسة ===== -->
 <section id="five-level-screen" class="screen hidden">
-  <button class="back-btn" id="five-level-back">🏠 رجوع</button>
+  <button class="back-btn" id="five-level-back">↩️ Back</button>
   <h2 id="five-level-title">قاعدة الخمسة ⭐</h2>
   <p class="screen-subtitle">اختار المستوى يا بطل</p>
 
   <button class="menu-btn green-btn five-level-btn" data-five-level="1">
-    🚀 المستوى 1<small>رقمين رأسيًا</small>
+    🚀 المستوى 1
   </button>
   <button class="menu-btn blue-btn five-level-btn" data-five-level="2">
-    🚀 المستوى 2<small>3 أرقام رأسيًا</small>
+    🚀 المستوى 2
   </button>
   <button class="menu-btn purple-btn five-level-btn" data-five-level="3">
-    🚀 المستوى 3<small>4 أو 5 أرقام رأسيًا</small>
+    🚀 المستوى 3
   </button>
+
+  <div class="rule-formula-box" id="five-rule-formula-box"></div>
+</section>
+
+<!-- ===== قاعدة العشرة: الأصدقاء الكبار ===== -->
+<section id="ten-rules-screen" class="screen hidden">
+  <button class="back-btn" id="ten-rules-back">↩️ Back</button>
+  <h2>قاعدة العشرة 🔟</h2>
+  <p class="screen-subtitle">اختار القاعدة يا بطل</p>
+  <div class="ten-rules-grid">
+    <button class="ten-rule-btn ten-rbasic" data-ten-rule-group="10"><strong>القاعدة الأساسية</strong></button>
+    <button class="ten-rule-btn ten-r91" data-ten-rule-group="9,1"><span>9️⃣ 1️⃣</span><strong>قاعدة 9 و 1</strong></button>
+    <button class="ten-rule-btn ten-r82" data-ten-rule-group="8,2"><span>8️⃣ 2️⃣</span><strong>قاعدة 8 و 2</strong></button>
+    <button class="ten-rule-btn ten-r73" data-ten-rule-group="7,3"><span>7️⃣ 3️⃣</span><strong>قاعدة 7 و 3</strong></button>
+    <button class="ten-rule-btn ten-r64" data-ten-rule-group="6,4"><span>6️⃣ 4️⃣</span><strong>قاعدة 6 و 4</strong></button>
+    <button class="ten-rule-btn ten-r5" data-ten-rule-group="5"><span>5️⃣ 5️⃣</span><strong>قاعدة 5 و 5</strong></button>
+    <button class="ten-rule-btn rule-mixed" data-ten-stage="4"><span>🔥</span><strong>تحدي القواعد المركبة</strong></button>
+  </div>
+</section>
+
+<section id="ten-level-screen" class="screen hidden">
+  <button class="back-btn" id="ten-level-back">↩️ Back</button>
+  <h2 id="ten-level-title">قاعدة 9 🔟</h2>
+  <p class="screen-subtitle">اختار المستوى يا بطل</p>
+  <button class="menu-btn green-btn ten-level-btn" data-ten-level="1">🚀 المستوى 1</button>
+  <button class="menu-btn blue-btn ten-level-btn" data-ten-level="2">🚀 المستوى 2</button>
+  <button class="menu-btn purple-btn ten-level-btn" data-ten-level="3">🚀 المستوى 3</button>
+
+  <div class="rule-formula-box" id="ten-rule-formula-box"></div>
 </section>
 
 <section id="general-sections-screen" class="screen hidden">
 
-  <button class="back-btn" id="general-back">
-    🏠 الرئيسية
-  </button>
+  <button class="back-btn" id="general-back">↩️ Back</button>
 
   <h2>الرياضيات العامة 📚</h2>
 
@@ -1979,9 +2207,7 @@ if ('serviceWorker' in navigator) {
 
 <section id="age-screen" class="screen hidden">
 
-  <button class="back-btn" id="age-back">
-    🏠 الرئيسية
-  </button>
+  <button class="back-btn" id="age-back">↩️ Back</button>
 
   <h2>عالم الروضة 🧸</h2>
 
@@ -2006,7 +2232,7 @@ if ('serviceWorker' in navigator) {
 <section id="nursery-lesson-screen" class="screen hidden">
 
   <div class="nursery-lesson-top">
-    <button class="back-btn" id="nursery-lesson-back">🏠 رجوع</button>
+    <button class="back-btn" id="nursery-lesson-back">↩️ Back</button>
     <div class="nursery-counter" id="nursery-counter">١ / ١٠</div>
   </div>
 
@@ -2051,12 +2277,12 @@ if ('serviceWorker' in navigator) {
 </section>
 
 <section id="nursery-after-learning-screen" class="screen hidden">
-  <button class="back-btn" id="nursery-after-learning-back">🏠 رجوع</button>
+  <button class="back-btn" id="nursery-after-learning-back">↩️ Back</button>
   <h2>برافو يا بطل! 🎉</h2>
   <p class="screen-subtitle">خلصت تعلم الأرقام 👏 جاهز نلعب؟</p>
   <div class="nursery-after-learning-buttons">
     <button class="menu-btn green-btn" id="nursery-start-game">🎮 ابدأ اللعبة</button>
-    <button class="menu-btn blue-btn" id="nursery-return-sections">↩️ رجوع</button>
+    <button class="menu-btn blue-btn" id="nursery-return-sections">↩️ ↩️ Back</button>
   </div>
   <div class="mascot-main">🧸</div>
 </section>
@@ -2167,7 +2393,7 @@ if ('serviceWorker' in navigator) {
     </button>
 
     <button id="home-btn" class="result-btn home-btn">
-      ↩️ رجوع
+      ↩️ ↩️ Back
     </button>
 
   </div>
@@ -2239,6 +2465,7 @@ let gameMode="";
 let mentalSection=1;
 let mentalLevel=1;
 let fiveStage=1; let fiveRule=1; let fiveLevel=1;
+let tenRule=9; let tenLevel=1; let tenRuleGroup=[9]; let tenStage=1; let tenQuestionHistory=new Set();
 let currentAge="";
 let currentQuestion=null;
 let score=0;
@@ -2246,6 +2473,7 @@ let questionNumber=0;
 let generalLevel=1;
 let generalDifficulty="easy";
 let generalSection=1;
+let currentLanguage="ar";
 let nurseryNumber=1;
 let nurseryLearningStart=1;
 let nurseryLearningEnd=10;
@@ -2265,6 +2493,7 @@ const $=id=>document.getElementById(id);
 
 const splashScreen=$("splash-screen");
 const modeScreen=$("mode-screen");
+const languageScreen=$("language-screen");
 const splashStartBtn=$("splash-start-btn");
 
 splashStartBtn.addEventListener("click",()=>{
@@ -2272,11 +2501,14 @@ splashStartBtn.addEventListener("click",()=>{
   playEnterVortexSound();
   splashScreen.classList.add("hidden");
   modeScreen.classList.remove("hidden");
+  languageScreen.classList.add("hidden");
 });
 const mentalScreen=$("mental-screen");
 const mentalLevelScreen=$("mental-level-screen");
 const fiveRulesScreen=$("five-rules-screen");
 const fiveLevelScreen=$("five-level-screen");
+const tenRulesScreen=$("ten-rules-screen");
+const tenLevelScreen=$("ten-level-screen");
 const generalSectionsScreen=$("general-sections-screen");
 const ageScreen=$("age-screen");
 const nurseryLessonScreen=$("nursery-lesson-screen");
@@ -2307,11 +2539,11 @@ function initAudio(){
   }
 
   if(audioContext&&audioContext.state==="suspended"){
-    audioContext.resume();
+    audioContext.resume().catch(()=>{});
   }
 }
 
-function tone(freq,duration=.1,type="sine",volume=.04){
+function tone(freq,duration=.1,type="sine",volume=.07){
   if(!audioContext)return;
 
   const oscillator=audioContext.createOscillator();
@@ -2354,11 +2586,11 @@ function playFallSound(){
 }
 
 function playTick(){
-  tone(650,.06,"square",.02);
+  tone(650,.06,"square",.035);
 }
 
 function playDanger(){
-  tone(350,.09,"square",.03);
+  tone(350,.09,"square",.05);
 }
 
 /* =====================================================
@@ -2367,30 +2599,35 @@ function playDanger(){
 
 function playStartSound(){
   initAudio();
-  tone(523,.12,"sine",.045);
-  setTimeout(()=>tone(659,.12,"sine",.045),110);
-  setTimeout(()=>tone(784,.22,"sine",.05),220);
+  tone(523,.12,"sine",.075);
+  setTimeout(()=>tone(659,.12,"sine",.075),110);
+  setTimeout(()=>tone(784,.22,"sine",.08),220);
 }
 
 function playWinSound(){
   initAudio();
-  tone(523,.12,"sine",.05);
-  setTimeout(()=>tone(659,.12,"sine",.05),120);
-  setTimeout(()=>tone(784,.16,"sine",.055),240);
-  setTimeout(()=>tone(1047,.28,"sine",.06),400);
+  tone(523,.12,"sine",.08);
+  setTimeout(()=>tone(659,.12,"sine",.08),120);
+  setTimeout(()=>tone(784,.16,"sine",.085),240);
+  setTimeout(()=>tone(1047,.28,"sine",.09),400);
   /* لمسة تصفيق كرتونية */
-  setTimeout(()=>tone(1250,.045,"square",.018),520);
-  setTimeout(()=>tone(1450,.045,"square",.018),600);
-  setTimeout(()=>tone(1250,.045,"square",.018),680);
+  setTimeout(()=>tone(1250,.045,"square",.032),520);
+  setTimeout(()=>tone(1450,.045,"square",.032),600);
+  setTimeout(()=>tone(1250,.045,"square",.032),680);
 }
 
 function playLoseSound(){
   initAudio();
-  tone(330,.16,"sawtooth",.045);
-  setTimeout(()=>tone(294,.16,"sawtooth",.045),170);
-  setTimeout(()=>tone(247,.18,"sawtooth",.045),340);
-  setTimeout(()=>tone(196,.45,"sawtooth",.05),530);
+  tone(330,.16,"sawtooth",.075);
+  setTimeout(()=>tone(294,.16,"sawtooth",.075),170);
+  setTimeout(()=>tone(247,.18,"sawtooth",.075),340);
+  setTimeout(()=>tone(196,.45,"sawtooth",.08),530);
 }
+
+document.addEventListener("pointerdown",()=>{
+  initAudio();
+  unlockMobileSpeech();
+},{once:true});
 
 document.addEventListener("click",(event)=>{
   const button=event.target.closest("button");
@@ -2495,6 +2732,107 @@ function generateMentalFiveQuestion(){
     numbers.push((move>=0?'+':'-')+Math.abs(move));
   }
 
+  return {numbers,answer:total};
+}
+
+/* =====================================================
+   قاعدة العشرة — الأصدقاء الكبار
+   ===================================================== */
+function tenRuleConfig(rule){
+  const data={
+    10:{addMax:10,subMin:11,subMax:20,addMin:1},
+    9:{addMax:9,subMin:10,subMax:18,addMin:1},
+    8:{addMax:9,subMin:10,subMax:17,addMin:1},
+    7:{addMax:9,subMin:10,subMax:16,addMin:1},
+    6:{addMax:9,subMin:10,subMax:15,addMin:1},
+    5:{addMax:9,subMin:10,subMax:14,addMin:5},
+    4:{addMax:9,subMin:10,subMax:13,addMin:1},
+    3:{addMax:9,subMin:10,subMax:12,addMin:1},
+    2:{addMax:9,subMin:10,subMax:11,addMin:1},
+    1:{addMax:9,subMin:10,subMax:10,addMin:9}
+  };
+  return data[rule];
+}
+
+function tenLevelCount(){
+  if(tenLevel===1)return 2;
+  if(tenLevel===2)return 3;
+  return Math.random()<.5?4:5;
+}
+
+function generateMentalTenQuestion(){
+  const count=tenLevelCount();
+  const mixed=tenStage===4;
+  const baseRules=tenRuleGroup.length ? tenRuleGroup : [9,8,7,6,5];
+
+  // قاعدة العشرة الأساسية: نبدأ من 10 ونضيف 1، مع تغيير السؤال كل مرة.
+  if(tenStage===1 && tenRule===10){
+    for(let attempt=0;attempt<50;attempt++){
+      const start=10;
+      const steps=[];
+      let total=start;
+      for(let i=1;i<count;i++){
+        total+=1;
+        steps.push('+1');
+      }
+      const numbers=[String(start),...steps];
+      const key=numbers.join('|');
+      if(!tenQuestionHistory.has(key)){
+        tenQuestionHistory.add(key);
+        return {numbers,answer:total};
+      }
+    }
+  }
+
+  for(let attempt=0;attempt<100;attempt++){
+    const rule=mixed
+      ? baseRules[Math.floor(Math.random()*baseRules.length)]
+      : tenRule;
+    const cfg=tenRuleConfig(rule);
+    const addition=Math.random()<0.5;
+
+    let start;
+    if(addition){
+      start=Math.floor(Math.random()*(cfg.addMax-cfg.addMin+1))+cfg.addMin;
+    }else{
+      start=Math.floor(Math.random()*(cfg.subMax-cfg.subMin+1))+cfg.subMin;
+    }
+
+    let total=start;
+    const numbers=[String(start)];
+
+    for(let i=1;i<count;i++){
+      const moveRule=mixed
+        ? baseRules[Math.floor(Math.random()*baseRules.length)]
+        : rule;
+      let move=addition ? moveRule : -moveRule;
+
+      if(total+move>20) move=-Math.abs(moveRule);
+      if(total+move<0) move=Math.abs(moveRule);
+
+      total+=move;
+      numbers.push((move>=0?'+':'-')+Math.abs(move));
+    }
+
+    if(total<0 || total>20) continue;
+
+    const key=numbers.join('|');
+    if(!tenQuestionHistory.has(key)){
+      tenQuestionHistory.add(key);
+      return {numbers,answer:total};
+    }
+  }
+
+  // fallback مضمون بدون تكرار قدر الإمكان
+  const fallbackRule=mixed ? 9 : tenRule;
+  const fallbackStart=tenRuleConfig(fallbackRule).addMin;
+  const numbers=[String(fallbackStart)];
+  let total=fallbackStart;
+  for(let i=1;i<count;i++){
+    total+=fallbackRule;
+    if(total>20) total-=fallbackRule;
+    numbers.push('+'+fallbackRule);
+  }
   return {numbers,answer:total};
 }
 
@@ -3047,22 +3385,26 @@ function jumpTo(step){
     Number(step.dataset.bottom)+
     step.offsetHeight;
 
-  fatout.style.left=
-    `${targetLeft}px`;
+  /* فطوط يتحرك فعليًا من مكانه للمنصة، مش مجرد نط في مكانه */
+  const currentLeft=parseFloat(fatout.style.left)||fatout.offsetLeft||0;
+  const currentBottom=parseFloat(fatout.style.bottom)||playerWorldBottom||0;
 
-  fatout.style.bottom=
-    `${targetBottom}px`;
+  fatout.style.transition=
+    "left .52s cubic-bezier(.2,.78,.25,1), bottom .52s cubic-bezier(.2,.78,.25,1)";
 
-  playerWorldBottom=targetBottom;
+  fatout.style.left=`${currentLeft}px`;
+  fatout.style.bottom=`${currentBottom}px`;
 
-  fatout.classList.remove(
-    "falling",
-    "jumping"
-  );
-
+  fatout.classList.remove("falling","jumping","fatout-landing");
   void fatout.offsetWidth;
 
   fatout.classList.add("jumping");
+  requestAnimationFrame(()=>{
+    fatout.style.left=`${targetLeft}px`;
+    fatout.style.bottom=`${targetBottom}px`;
+  });
+
+  playerWorldBottom=targetBottom;
 }
 
 /* =====================================================
@@ -3149,6 +3491,14 @@ function chooseAnswer(step){
 
       land(step);
 
+      fatout.style.transition="none";
+      fatout.classList.remove("jumping");
+      fatout.classList.add("fatout-landing");
+      document.getElementById("fatout")?.classList.add("fatout-happy");
+      setTimeout(()=>{
+        document.getElementById("fatout")?.classList.remove("fatout-happy","fatout-landing");
+      },650);
+
       moving=false;
 
       nextQuestion();
@@ -3160,11 +3510,9 @@ function chooseAnswer(step){
 
     playFallSound();
 
-    /* المنصة التي اختارها الطفل غلط تختفي،
-       والإجابة الصحيحة تفضل منورة وبتـرعش */
-    step.classList.add(
-      "fading-platform"
-    );
+    /* المنصة الغلط تفضل موجودة أثناء قفزة فطوط،
+       عشان الطفل يشوفه بيوصل لها الأول. بعد ما يقف عليها
+       تبدأ المنصة في السقوط ثم فطوط يسقط منها. */
 
     const correctPlatform =
       Array.from(
@@ -3180,18 +3528,32 @@ function chooseAnswer(step){
       );
     }
 
-    fatout.classList.remove(
-      "jumping"
-    );
+    /* يتحرك للمنصة الغلط ثم يسقط منها، عشان الإجابة يكون لها تفاعل بصري واضح */
+    const wrongRect=step.getBoundingClientRect();
+    const wrongStageRect=gameStage.getBoundingClientRect();
+    const wrongLeft=wrongRect.left-wrongStageRect.left+wrongRect.width/2-fatout.offsetWidth/2;
+    const wrongBottom=Number(step.dataset.bottom)+step.offsetHeight;
 
-    void fatout.offsetWidth;
+    fatout.style.transition="left .34s ease-out, bottom .34s ease-out";
+    fatout.style.left=`${wrongLeft}px`;
+    fatout.style.bottom=`${wrongBottom}px`;
+    playerWorldBottom=wrongBottom;
 
-    fatout.classList.add(
-      "falling"
-    );
+    setTimeout(()=>{
+      /* فطوط وصل فعلًا فوق البسطة الغلط */
+      fatout.style.transition="none";
+      fatout.classList.remove("jumping");
+
+      /* لحظة صغيرة تثبت إنه وقف على البسطة قبل ما تقع */
+      setTimeout(()=>{
+        step.classList.add("fading-platform");
+        void fatout.offsetWidth;
+        fatout.classList.add("falling");
+      },180);
+    },520);
 
     /* ندي الطفل وقت كفاية يشوف الإجابة الصح،
-       ووبعد ثانيتين تظهر إعادة المحاولة */
+       وبعدها تظهر إعادة المحاولة */
     setTimeout(()=>{
 
       if(correctPlatform){
@@ -3224,7 +3586,7 @@ function startTimer(){
       const elapsed=Math.floor((Date.now()-gameStartTime)/1000);
       const minutes=Math.floor(elapsed/60);
       const seconds=elapsed%60;
-      const timeText = minutes > 0 ? `${minutes} د ${seconds} ث` : `${seconds} ث`;
+      const timeText = minutes > 0 ? (currentLanguage==="en"?`${minutes}m ${seconds}s`:`${minutes} د ${seconds} ث`) : (currentLanguage==="en"?`${seconds}s`:`${seconds} ث`);
       if(timerValue) timerValue.textContent = timeText;
       if(elapsed > 0){
         playTick();
@@ -3263,7 +3625,18 @@ function startTimer(){
     return;
   }
 
-  timer = 15;
+  /* الحساب الذهني: زمن السؤال حسب مستوى الليفل — موحّد لكل القواعد */
+  if(gameMode === "mental") {
+    const activeMentalLevel = mentalSection === 1 ? mentalLevel
+                            : mentalSection === 2 ? fiveLevel
+                            : tenLevel;
+    if(activeMentalLevel === 1) timer = 15;
+    else if(activeMentalLevel === 2) timer = 20;
+    else timer = 30;
+  } else {
+    timer = 15;
+  }
+
   if(timerValue) timerValue.textContent = timer;
   if(timerClock) timerClock.classList.remove("danger");
 
@@ -3333,8 +3706,11 @@ function nextQuestion(){
     else if(mentalSection===1){
       finishMentalLevel();
     }
-    else{
+    else if(mentalSection===2){
       finishMentalSectionTwo();
+    }
+    else{
+      finishMentalSectionThree();
     }
 
     return;
@@ -3360,6 +3736,19 @@ function nextQuestion(){
 
     currentQuestion=
       generateMentalFiveQuestion();
+
+    renderMentalVertical(
+      currentQuestion.numbers
+    );
+
+  }
+  else if(
+    gameMode==="mental"&&
+    mentalSection===3
+  ){
+
+    currentQuestion=
+      generateMentalTenQuestion();
 
     renderMentalVertical(
       currentQuestion.numbers
@@ -3404,21 +3793,21 @@ function finishNurseryGame(){
   if(nurseryScore) nurseryScore.textContent=score;
 
   // الروضة: بعد 10 أسئلة فقط يظهر "العب تاني" وليس مستوى جديد
-  $("next-level-btn").textContent="🔄 العب تاني";
-  $("level-home-btn").textContent="↩️ رجوع";
+  $("next-level-btn").textContent=currentLanguage==="en" ? "🔄 Play Again" : "🔄 العب تاني";
+  $("level-home-btn").textContent=currentLanguage==="en" ? "↩️ ↩️ Back" : "↩️ ↩️ Back";
 
   gameScreen.classList.add("hidden");
   levelCompleteScreen.classList.remove("hidden");
 
   const title=levelCompleteScreen.querySelector("h2");
   const nurseryTimeMessage=$("nursery-time-message");
-  if(title) title.textContent="برافو يا بطل! 🎉";
+  if(title) title.textContent=currentLanguage==="en"?"Great job! 🎉":"برافو يا بطل! 🎉";
   if(nurseryTimeMessage){
     const totalTime=Math.floor((Date.now()-gameStartTime)/1000);
     const minutes=Math.floor(totalTime/60);
     const seconds=totalTime%60;
-    const timeText=minutes>0 ? `${minutes} دقيقة و ${seconds} ثانية` : `${seconds} ثانية`;
-    nurseryTimeMessage.textContent=`⏱️ حلّيت 10 أسئلة في ${timeText}! ⭐`;
+    const timeText=minutes>0 ? (currentLanguage==="en"?`${minutes} minutes and ${seconds} seconds`:`${minutes} دقيقة و ${seconds} ثانية`) : (currentLanguage==="en"?`${seconds} seconds`:`${seconds} ثانية`);
+    nurseryTimeMessage.textContent=currentLanguage==="en"?`⏱️ You solved 10 questions in ${timeText}! ⭐`:`⏱️ حلّيت 10 أسئلة في ${timeText}! ⭐`;
     nurseryTimeMessage.style.display="block";
   }
 }
@@ -3437,27 +3826,27 @@ function scoreMessage(){
   if(percentage<=20){
     return[
       "💪",
-      "ولا يهمك! جرّب تاني يا بطل 💪"
+      currentLanguage==="en" ? "No worries! Try again 💪" : "ولا يهمك! جرّب تاني يا بطل 💪"
     ];
   }
 
   if(percentage<=50){
     return[
       "🔥",
-      "بداية حلوة! كمل وحاول تزود سكورك 🔥"
+      currentLanguage==="en" ? "Great start! Keep going and improve your score 🔥" : "بداية حلوة! كمل وحاول تزود سكورك 🔥"
     ];
   }
 
   if(percentage<=80){
     return[
       "🎯",
-      "شاطر جدًا! قربت تكسر رقمك 🎯"
+      currentLanguage==="en" ? "Very good! You’re close to beating your score 🎯" : "شاطر جدًا! قربت تكسر رقمك 🎯"
     ];
   }
 
   return[
     "🏆",
-    "ممتاز يا بطل! أداء رائع 👏"
+    currentLanguage==="en" ? "Excellent! Great performance 👏" : "ممتاز يا بطل! أداء رائع 👏"
   ];
 }
 
@@ -3512,7 +3901,7 @@ function finishMentalLevel(){
   $("mental-level-message").textContent=
     mentalLevel<3
       ?`برافو! خلصت المستوى ${mentalLevel} 🎉`
-      :"برافو يا بطل! خلصت قاعدة الأربعة كلها 👏🎉";
+      :currentLanguage==="en" ? "Great job! You finished the entire Rule of Four 👏🎉" : "برافو يا بطل! خلصت قاعدة الأربعة كلها 👏🎉";
 
   document
     .querySelector("#mental-level-score span")
@@ -3521,7 +3910,7 @@ function finishMentalLevel(){
   $("next-mental-level-btn").textContent=
     mentalLevel<3
       ?`🚀 المستوى ${mentalLevel+1}`
-      :"🔄 العب تاني";
+      :currentLanguage==="en" ? "🔄 Play Again" : "🔄 العب تاني";
 
   mentalLevelCompleteScreen.classList.remove(
     "hidden"
@@ -3542,7 +3931,7 @@ function finishMentalSectionTwo(){
   $("result-icon").textContent="🏆";
 
   $("encouraging-msg").textContent=
-    `برافو يا بطل! خلصت المستوى ${fiveLevel} 👏🎉`;
+    currentLanguage==="en" ? `Great job! You finished Level ${fiveLevel} 👏🎉` : `برافو يا بطل! خلصت المستوى ${fiveLevel} 👏🎉`;
 
   document
     .querySelector("#final-score span")
@@ -3551,6 +3940,21 @@ function finishMentalSectionTwo(){
   gameOverScreen.classList.remove(
     "hidden"
   );
+}
+
+/* =====================================================
+   قاعدة العشرة COMPLETE
+   ===================================================== */
+function finishMentalSectionThree(){
+  gameRunning=false;
+  playWinSound();
+  clearInterval(timerInterval);
+  $("result-icon").textContent="🏆";
+  $("encouraging-msg").textContent=currentLanguage==="en" ? `Great job! You finished Rule ${tenRule} 👏🎉` : `برافو يا بطل! خلصت قاعدة ${tenRule} 👏🎉`;
+  document.querySelector("#final-score span").textContent=score;
+  $("retry-btn").textContent=currentLanguage==="en" ? "🎮 Play Again" : "🎮 العب تاني";
+  $("home-btn").textContent=currentLanguage==="en" ? "↩️ Back" : "↩️ رجوع";
+  gameOverScreen.classList.remove("hidden");
 }
 
 /* =====================================================
@@ -3568,13 +3972,13 @@ function finishGeneralLevel(){
     .textContent=score;
 
   $("level-message").textContent=
-    "برافو يا بطل! خلصت 20 سؤال 🎉";
+    currentLanguage==="en" ? "Great job! You finished 20 questions 🎉" : "برافو يا بطل! خلصت 20 سؤال 🎉";
 
   $("next-level-btn").textContent=
-    "🔄 العب تاني";
+    currentLanguage==="en" ? "🔄 Play Again" : "🔄 العب تاني";
 
   $("level-home-btn").textContent=
-    "↩️ رجوع";
+    currentLanguage==="en" ? "↩️ ↩️ Back" : "↩️ ↩️ Back";
 
   levelCompleteScreen.classList.remove("hidden");
 }
@@ -3694,12 +4098,7 @@ window.addEventListener("load",()=>{
   if(!splashScreen.classList.contains("hidden")) startIntroMusic();
 });
 
-const splashScreenElement=document.getElementById("splash-screen");
-if(splashScreenElement){
-  splashScreenElement.addEventListener("pointerdown",()=>{
-    startIntroMusic();
-  },{once:false});
-}
+
 
 /* =====================================================
    START
@@ -3726,6 +4125,8 @@ function startGame(){
   mentalScreen.classList.add("hidden");
   mentalLevelScreen.classList.add("hidden");
   fiveRulesScreen.classList.add("hidden");
+  tenRulesScreen.classList.add("hidden");
+  tenLevelScreen.classList.add("hidden");
   generalSectionsScreen.classList.add("hidden");
   ageScreen.classList.add("hidden");
   nurseryLessonScreen.classList.add("hidden");
@@ -3744,8 +4145,10 @@ function startGame(){
   initAudio();
 
   if(timerValue){
-    timerValue.textContent =
-      gameMode==="general" ? "30" : "15";
+    let initialTime="15";
+    if(gameMode==="general") initialTime="30";
+    else if(gameMode==="mental") initialTime=mentalSection===1?"15":(mentalSection===2?"20":"30");
+    timerValue.textContent=initialTime;
   }
 
   setInitialTower();
@@ -3769,6 +4172,8 @@ function goHome(){
   mentalLevelCompleteScreen.classList.add("hidden");
   mentalLevelScreen.classList.add("hidden");
   fiveRulesScreen.classList.add("hidden");
+  tenRulesScreen.classList.add("hidden");
+  tenLevelScreen.classList.add("hidden");
   generalSectionsScreen.classList.add("hidden");
   mentalScreen.classList.add("hidden");
   ageScreen.classList.add("hidden");
@@ -3778,8 +4183,266 @@ function goHome(){
 }
 
 /* =====================================================
+   LANGUAGE
+   ===================================================== */
+
+
+function applyBackButtonLanguage(){
+  const label = currentLanguage === "ar" ? "↩️ رجوع" : "↩️ Back";
+  document.querySelectorAll(".back-btn").forEach(btn=>{
+    btn.textContent=label;
+  });
+}
+function applyLanguage(lang){
+  currentLanguage=lang==="en"?"en":"ar";
+  localStorage.setItem("superFatoutLanguage",currentLanguage);
+  document.documentElement.lang=currentLanguage;
+  document.documentElement.dir=currentLanguage==="ar"?"rtl":"ltr";
+  applyBackButtonLanguage();
+
+  const en=currentLanguage==="en";
+  const set=(id,ar,enText)=>{const el=$(id); if(el) el.textContent=en?enText:ar;};
+
+  set("splash-start-btn","🎮 ابدأ المغامرة","🎮 Start Adventure");
+  set("btn-nursery","🧸 عالم الروضة","🧸 Nursery World");
+  const nurseryBtn=$("btn-nursery"); if(nurseryBtn){const sm=nurseryBtn.querySelector("small"); if(sm) sm.textContent=en?"Little Numbers Adventure":"مغامرة الأرقام الصغيرة";}
+  set("btn-mental","🧠 الحساب الذهني","🧠 Mental Math");
+  set("btn-general","📚 الرياضيات العامة","📚 General Math");
+  set("btn-language","🌐","🌐");
+  const modeTitle=document.querySelector("#mode-screen h2"); if(modeTitle) modeTitle.textContent=en?"Choose your path 💪":"اختار طريقك يا بطل 💪";
+
+  set("language-back","🏠 الرئيسية","🏠 Home");
+  const langTitle=document.querySelector("#language-screen h2"); if(langTitle) langTitle.textContent=en?"🌐 Language":"🌐 اللغة";
+  const langSub=document.querySelector("#language-screen .screen-subtitle"); if(langSub) langSub.textContent=en?"Choose a language":"اختار اللغة";
+  const langAr=document.querySelector(".language-choice[data-lang=\"ar\"]"); if(langAr) langAr.textContent=en?"🇪🇬 Arabic":"🇪🇬 العربية";
+  const langEn=document.querySelector(".language-choice[data-lang=\"en\"]"); if(langEn) langEn.textContent="🇬🇧 English";
+
+  set("mental-back","🏠 الرئيسية","🏠 Home");
+  const mentalTitle=document.querySelector("#mental-screen h2"); if(mentalTitle) mentalTitle.textContent=en?"Mental Math 🧠":"الحساب الذهني 🧠";
+  const mentalSub=document.querySelector("#mental-screen .screen-subtitle"); if(mentalSub) mentalSub.textContent=en?"Choose a section":"اختار القسم يا بطل";
+  const fiveRulesTitle=document.querySelector("#five-rules-screen h2"); if(fiveRulesTitle) fiveRulesTitle.textContent=en?"Rule of Five ⭐":"قاعدة الخمسة ⭐";
+  const fiveRulesSub=document.querySelector("#five-rules-screen .screen-subtitle"); if(fiveRulesSub) fiveRulesSub.textContent=en?"Choose a rule":"اختار القاعدة يا بطل";
+  const tenRulesTitle=document.querySelector("#ten-rules-screen h2"); if(tenRulesTitle) tenRulesTitle.textContent=en?"Rule of Ten 🔟":"قاعدة العشرة 🔟";
+  const tenRulesSub=document.querySelector("#ten-rules-screen .screen-subtitle"); if(tenRulesSub) tenRulesSub.textContent=en?"Choose a rule":"اختار القاعدة يا بطل";
+  set("btn-section-one","🔢 قاعدة الأربعة","🔢 Rule of Four");
+  set("btn-section-two","⭐ قاعدة الخمسة","⭐ Rule of Five");
+  set("btn-section-three","🔟 قاعدة العشرة","🔟 Rule of Ten");
+
+  // ===== أسماء قواعد الخمسة =====
+  const fiveRuleTexts = [
+    ["القاعدة الأساسية", "Basic Rule"],
+    ["قاعدة الواحد والأربعة", "One and Four Rule"],
+    ["قاعدة الثلاثة والاثنين", "Three and Two Rule"],
+    ["تحدي القواعد المركبة", "Mixed Rules Challenge"]
+  ];
+  document.querySelectorAll("#five-rules-screen .five-rule-btn strong").forEach((el,i)=>{
+    if(fiveRuleTexts[i]) el.textContent = en ? fiveRuleTexts[i][1] : fiveRuleTexts[i][0];
+  });
+
+  // ===== أسماء قواعد العشرة =====
+  const tenRuleTexts = [
+    ["القاعدة الأساسية", "Basic Rule"],
+    ["قاعدة 9 و 1", "Rule 9 and 1"],
+    ["قاعدة 8 و 2", "Rule 8 and 2"],
+    ["قاعدة 7 و 3", "Rule 7 and 3"],
+    ["قاعدة 6 و 4", "Rule 6 and 4"],
+    ["قاعدة 5 و 5", "Rule 5 and 5"],
+    ["تحدي القواعد المركبة", "Mixed Rules Challenge"]
+  ];
+  document.querySelectorAll("#ten-rules-screen .ten-rule-btn strong").forEach((el,i)=>{
+    if(tenRuleTexts[i]) el.textContent = en ? tenRuleTexts[i][1] : tenRuleTexts[i][0];
+  });
+
+  const title=document.querySelector("#game-screen .question-title"); if(title) title.textContent=en?"Choose the correct answer 🧠":"اختار الإجابة الصحيحة 🧠";
+  set("exit-btn","🚪 خروج","🚪 Exit");
+  set("retry-btn","🔄 إعادة المحاولة","🔄 Try Again");
+  set("home-btn",currentLanguage==="en" ? "↩️ ↩️ Back" : "↩️ ↩️ Back","↩️ ↩️ Back");
+  set("level-home-btn","🏠 الرئيسية","🏠 Home");
+  set("next-level-btn","🚀 المستوى التالي","🚀 Next Level");
+  set("next-mental-level-btn","🚀 المرحلة التالية","🚀 Next Level");
+  set("mental-level-home-btn","🏠 الرئيسية","🏠 Home");
+  const scoreLabels=document.querySelectorAll("#final-score,#level-score,#mental-level-score");
+  scoreLabels.forEach(el=>{
+    const span=el.querySelector("span");
+    if(span) el.firstChild.textContent=(en?"Score: ":"سكورك: ");
+  });
+
+  document.querySelectorAll(".mental-level-btn").forEach((b,i)=>{b.childNodes[b.childNodes.length-1].textContent=` ${en?"Level":"المستوى"} ${i+1}`;});
+  translateStaticScreens();
+}
+  applyBackButtonLanguage();
+
+/* =====================================================
+   COMPLETE LANGUAGE COVERAGE
+   ===================================================== */
+const LANGUAGE_TEXT={
+  "سوبر فطوط":"Super Fatout",
+  "⭐ مغامرة جديدة":"⭐ New Adventure",
+  "🎮 ابدأ المغامرة":"🎮 Start Adventure",
+  "اختار طريقك يا بطل 💪":"Choose your path 💪",
+  "مغامرة الأرقام الصغيرة":"Little Numbers Adventure",
+  "🌐 اللغة":"🌐 Language",
+  "اختيار اللغة":"Choose Language",
+  "اختار اللغة":"Choose a language",
+  "🏠 الرئيسية":"🏠 Home",
+  "الحساب الذهني 🧠":"Mental Math 🧠",
+  "اختار القسم يا بطل":"Choose a section",
+  "اختار المستوى":"Choose a level",
+  "قاعدة الأربعة 🔢":"Rule of Four 🔢",
+  "قاعدة الخمسة ⭐":"Rule of Five ⭐",
+  "قاعدة العشرة 🔟":"Rule of Ten 🔟",
+  "اختار القاعدة يا بطل":"Choose a rule",
+  "القاعدة الأساسية":"Basic Rule",
+  "قاعدة الواحد والأربعة":"One and Four Rule",
+  "قاعدة الثلاثة والاثنين":"Three and Two Rule",
+  "تحدي القواعد المركبة":"Mixed Rules Challenge",
+  "قاعدة 9 و 1":"Rule 9 and 1",
+  "قاعدة 8 و 2":"Rule 8 and 2",
+  "قاعدة 7 و 3":"Rule 7 and 3",
+  "قاعدة 6 و 4":"Rule 6 and 4",
+  "قاعدة 5":"Rule 5",
+  "رقمين رأسيًا":"2 numbers",
+  "3 أرقام رأسيًا":"3 numbers",
+  "4 أو 5 أرقام رأسيًا":"4 or 5 numbers",
+  "اختار الإجابة الصحيحة 🧠":"Choose the correct answer 🧠",
+  "🚪 خروج":"🚪 Exit",
+  "🔄 إعادة المحاولة":"🔄 Try Again",
+  "↩️ ↩️ Back":"↩️ ↩️ Back",
+  "🚀 المستوى التالي":"🚀 Next Level",
+  "🚀 المرحلة التالية":"🚀 Next Level",
+  "سكورك:":"Score: ",
+  "الرياضيات العامة 📚":"General Math 📚",
+  "🟢 المستوى الأول":"🟢 Level One",
+  "🔵 المستوى الثاني":"🔵 Level Two",
+  "أقل من 10 سنين":"Under 10 years",
+  "من 11 سنة فأكثر":"11 years and older",
+  "سهل":"Easy",
+  "متوسط":"Medium",
+  "صعب":"Hard",
+  "عالم الروضة 🧸":"Nursery World 🧸",
+  "اختار المغامرة يا بطل 🌈":"Choose your adventure 🌈",
+  "تعلم الأرقام ١ - ١٠":"Learn numbers 1 - 10",
+  "تعلم الأرقام ١١ - ٢٠":"Learn numbers 11 - 20",
+  "تعلم الأرقام 🔢":"Learn the numbers 🔢",
+  "عدّ الحاجات مع فطوط 👦🏻":"Count the objects with Fatout 👦🏻",
+  "التالي ➜":"Next ➜",
+  "🎉 خلصنا الأرقام":"🎉 Numbers complete",
+  "برافو يا بطل! 🎉":"Great job! 🎉",
+  "خلصت تعلم الأرقام 👏 جاهز نلعب؟":"You finished learning the numbers 👏 Ready to play?",
+  "🎮 ابدأ اللعبة":"🎮 Start Game",
+  "ممتاز يا بطل! أداء رائع 👏":"Excellent! Great performance 👏",
+  "ولا يهمك! جرّب تاني يا بطل 💪":"No worries! Try again 💪",
+  "بداية حلوة! كمل وحاول تزود سكورك 🔥":"Great start! Keep going and improve your score 🔥",
+  "شاطر جدًا! قربت تكسر رقمك 🎯":"Very good! You're close to beating your score 🎯",
+  "معادلة القاعدة":"Rule formula",
+  "برافو! خلصت 20 سؤال 🎉":"Great job! You finished 20 questions 🎉",
+  "دقيقة":"minute",
+  "دقائق":"minutes",
+  "ثانية":"second",
+  "ثواني":"seconds",
+  "د":"m",
+  "ث":"s"
+};
+const AR_TO_EN=Object.fromEntries(Object.entries(LANGUAGE_TEXT));
+const EN_TO_AR=Object.fromEntries(Object.entries(LANGUAGE_TEXT).map(([a,e])=>[e,a]));
+let languageObserverBusy=false;
+function translateTextNode(node){
+  if(languageObserverBusy) return;
+  if(node.parentElement && node.parentElement.closest(".no-translate")) return;
+  let t=node.nodeValue;
+  if(!t || !t.trim()) return;
+  const trimmed=t.trim();
+  let out=t;
+
+  if(currentLanguage==="en"){
+    if(AR_TO_EN[trimmed]) out=t.replace(trimmed,AR_TO_EN[trimmed]);
+    else{
+      out=out.replace(/برافو يا بطل! خلصت المستوى (\d+) 🎉/g,'Great job! You finished Level $1 🎉');
+      out=out.replace(/برافو يا بطل! خلصت قاعدة (\d+) 👏🎉/g,'Great job! You finished Rule $1 👏🎉');
+      out=out.replace(/برافو يا بطل! خلصت قاعدة الأربعة كلها 👏🎉/g,'Great job! You finished the entire Rule of Four 👏🎉');
+      out=out.replace(/حلّيت 10 أسئلة في/g,'You solved 10 questions in');
+      out=out.replace(/خلصت تعلم الأرقام من ١١ لـ ٢٠ 👏 جاهز نلعب؟/g,'You finished learning numbers 11 to 20 👏 Ready to play?');
+      out=out.replace(/خلصت تعلم الأرقام 👏 جاهز نلعب؟/g,'You finished learning the numbers 👏 Ready to play?');
+      out=out.replace(/العب تاني/g,'Play Again');
+      out=out.replace(/المستوى التالي/g,'Next Level');
+      out=out.replace(/المرحلة التالية/g,'Next Level');
+      out=out.replace(/المستوى (\d+)/g,'Level $1');
+    }
+  }else{
+    if(EN_TO_AR[trimmed]) out=t.replace(trimmed,EN_TO_AR[trimmed]);
+    else{
+      out=out.replace(/Great job! You finished Level (\d+) 🎉/g,'برافو يا بطل! خلصت المستوى $1 🎉');
+      out=out.replace(/Great job! You finished Rule (\d+) 👏🎉/g,'برافو يا بطل! خلصت قاعدة $1 👏🎉');
+      out=out.replace(/Great job! You finished the entire Rule of Four 👏🎉/g,'برافو يا بطل! خلصت قاعدة الأربعة كلها 👏🎉');
+      out=out.replace(/You solved 10 questions in/g,'حلّيت 10 أسئلة في');
+      out=out.replace(/You finished learning numbers 11 to 20 👏 Ready to play\?/g,'خلصت تعلم الأرقام من ١١ لـ ٢٠ 👏 جاهز نلعب؟');
+      out=out.replace(/You finished learning the numbers 👏 Ready to play\?/g,'خلصت تعلم الأرقام 👏 جاهز نلعب؟');
+      out=out.replace(/Play Again/g,'العب تاني');
+      out=out.replace(/Next Level/g,'المستوى التالي');
+      out=out.replace(/Level (\d+)/g,'المستوى $1');
+    }
+  }
+
+  if(out!==t){
+    languageObserverBusy=true;
+    node.nodeValue=out;
+    languageObserverBusy=false;
+  }
+}
+function translateWholePageText(){
+  const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+  const nodes=[]; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(translateTextNode);
+}
+const languageObserver=new MutationObserver(muts=>{
+  if(languageObserverBusy) return;
+  for(const m of muts){
+    m.addedNodes.forEach(n=>{
+      if(n.nodeType===3) translateTextNode(n);
+      else if(n.nodeType===1){
+        const w=document.createTreeWalker(n,NodeFilter.SHOW_TEXT); const a=[];
+        while(w.nextNode()) a.push(w.currentNode); a.forEach(translateTextNode);
+      }
+    });
+  }
+});
+languageObserver.observe(document.body,{subtree:true,childList:true,characterData:true});
+
+function translateStaticScreens(){
+  translateWholePageText();
+  if(typeof nurseryLessonScreen!=="undefined" && !nurseryLessonScreen.classList.contains("hidden") && typeof renderNurseryNumber==="function"){
+    renderNurseryNumber();
+  }
+  document.querySelectorAll('.mental-level-btn,.five-level-btn,.ten-level-btn').forEach((b,i)=>{
+    const small=b.querySelector('small');
+    if(small) small.textContent=(i%3===0?'2 numbers':i%3===1?'3 numbers':'4 or 5 numbers');
+  });
+}
+
+applyLanguage(currentLanguage);
+
+/* =====================================================
    BUTTONS
    ===================================================== */
+
+$("btn-language").addEventListener("click",()=>{
+  modeScreen.classList.add("hidden");
+  languageScreen.classList.remove("hidden");
+});
+
+document.querySelectorAll(".language-choice").forEach(button=>{
+  button.addEventListener("click",()=>{
+    const lang=button.dataset.lang==="ar" ? "ar" : "en";
+    applyLanguage(lang);
+    languageScreen.classList.add("hidden");
+    modeScreen.classList.remove("hidden");
+  });
+});
+
+$("language-back").addEventListener("click",()=>{
+  languageScreen.classList.add("hidden");
+  modeScreen.classList.remove("hidden");
+});
 
 $("btn-mental").addEventListener("click",()=>{
 
@@ -3847,16 +4510,122 @@ $("btn-section-two").addEventListener("click",()=>{
 
 });
 
+
+/* ===== رجوع قاعدة العشرة ===== */
+$("ten-rules-back").addEventListener("click",()=>{
+  tenRulesScreen.classList.add("hidden");
+  mentalScreen.classList.remove("hidden");
+});
+
+$("ten-level-back").addEventListener("click",()=>{
+  tenLevelScreen.classList.add("hidden");
+  tenRulesScreen.classList.remove("hidden");
+});
+
+/* ===== دخول قاعدة العشرة ===== */
+$("btn-section-three").addEventListener("click",()=>{
+  mentalScreen.classList.add("hidden");
+  tenRulesScreen.classList.remove("hidden");
+});
+
+/* ===== اختيار قاعدة من قاعدة العشرة ===== */
+document.querySelectorAll("[data-ten-rule-group]").forEach(button=>{
+  button.addEventListener("click",()=>{
+    tenRuleGroup=button.dataset.tenRuleGroup.split(",").map(Number);
+    tenRulesScreen.classList.add("hidden");
+    tenLevelScreen.classList.remove("hidden");
+    const isBasicTenRule=tenRuleGroup.length===1 && tenRuleGroup[0]===10;
+    $("ten-level-title").textContent = isBasicTenRule
+      ? (currentLanguage==="en" ? "Basic Rule" : "القاعدة الأساسية")
+      : (currentLanguage==="en" ? `Rule ${tenRuleGroup.join(" and ")} 🔟` : `قاعدة ${tenRuleGroup.join(" و ")} 🔟`);
+    const tenFormulaBox=$("ten-rule-formula-box");
+    if(tenFormulaBox){
+      tenFormulaBox.style.display=isBasicTenRule ? "none" : "";
+      if(!isBasicTenRule) setTenRuleFormula(tenRuleGroup);
+    }
+  });
+});
+
+/* ===== مستويات قاعدة العشرة ===== */
+document.querySelectorAll(".ten-level-btn").forEach(button=>{
+  button.addEventListener("click",()=>{
+    gameMode="mental";
+    mentalSection=3;
+    tenLevel=Number(button.dataset.tenLevel);
+    tenStage=1;
+    tenQuestionHistory=new Set();
+    tenRule=tenRuleGroup[Math.floor(Math.random()*tenRuleGroup.length)];
+    tenRulesScreen.classList.add("hidden");
+    tenLevelScreen.classList.add("hidden");
+    startGame();
+  });
+});
+
+/* ===== تحدي القواعد المركبة — قاعدة العشرة ===== */
+document.querySelectorAll('[data-ten-stage="4"]').forEach(button=>{
+  button.addEventListener("click",()=>{
+    gameMode="mental";
+    mentalSection=3;
+    tenStage=4;
+    tenLevel=3;
+    tenRuleGroup=[9,8,7,6,5];
+    tenQuestionHistory=new Set();
+    tenRulesScreen.classList.add("hidden");
+    tenLevelScreen.classList.add("hidden");
+    startGame();
+  });
+});
+
+function setFiveRuleFormula(rule){
+  const box=$("five-rule-formula-box");
+  if(!box) return;
+
+  const formulas={
+    1:["+5 = +5","−5 = −5"],
+    2:["+4 = +5 − 1","−4 = −5 + 1","+1 = +5 − 4","−1 = −5 + 4"],
+    3:["+3 = +5 − 2","−3 = −5 + 2","+2 = +5 − 3","−2 = −5 + 3"]
+  };
+
+  const list=formulas[rule] || formulas[1];
+  box.innerHTML=`<div class="rule-formula-title">معادلة القاعدة</div><div class="rule-formula-grid">${list.map(f=>`<div class="rule-formula">${f}</div>`).join("")}</div>`;
+}
+
+function setTenRuleFormula(group){
+  const box=$("ten-rule-formula-box");
+  if(!box) return;
+
+  const rules=Array.isArray(group) ? group : [Number(group)];
+  const list=[];
+  rules.forEach(r=>{
+    if(r===10){
+      list.push("1 + 10 = 11");
+      list.push("2 + 10 = 12");
+      list.push("3 + 10 = 13");
+      list.push("4 + 10 = 14");
+      list.push("5 + 10 = 15");
+    }else{
+      const friend=10-r;
+      list.push(`+${r} = +10 − ${friend}`);
+      list.push(`−${r} = −10 + ${friend}`);
+    }
+  });
+  box.innerHTML=`<div class="rule-formula-grid">${list.map(f=>`<div class="rule-formula">${f}</div>`).join("")}</div>`;
+}
+
 /* ===== اختيار قاعدة من قاعدة الخمسة ===== */
 document.querySelectorAll("[data-five-rule]").forEach(button=>{
   button.addEventListener("click",()=>{
     fiveRule=Number(button.dataset.fiveRule);
     fiveRulesScreen.classList.add("hidden");
     fiveLevelScreen.classList.remove("hidden");
-    $("five-level-title").textContent =
-      fiveRule===1 ? "القاعدة الأساسية ⭐" :
-      fiveRule===2 ? "قاعدة الواحد والأربعة 1️⃣4️⃣" :
-      "قاعدة الثلاثة والاثنين 3️⃣2️⃣";
+    $("five-level-title").textContent = currentLanguage==="en" ?
+      (fiveRule===1 ? "Basic Rule ⭐" :
+       fiveRule===2 ? "One and Four Rule 1️⃣4️⃣" :
+       "Three and Two Rule 3️⃣2️⃣") :
+      (fiveRule===1 ? "القاعدة الأساسية ⭐" :
+       fiveRule===2 ? "قاعدة الواحد والأربعة 1️⃣4️⃣" :
+       "قاعدة الثلاثة والاثنين 3️⃣2️⃣");
+    setFiveRuleFormula(fiveRule);
   });
 });
 
@@ -3922,42 +4691,144 @@ function openNurseryLearning(start,end,mode){
 }
 
 $("btn-learn-numbers").addEventListener("click",()=>{
+  initAudio();
+  unlockMobileSpeech();
   openNurseryLearning(1,10,"nursery");
 });
 
 $("btn-learn-numbers-11-20").addEventListener("click",()=>{
+  initAudio();
+  unlockMobileSpeech();
   openNurseryLearning(11,20,"nursery11");
 });
 
 function renderNurseryNumber(){
 
   const arabicNumbers=["٠","١","٢","٣","٤","٥","٦","٧","٨","٩","١٠","١١","١٢","١٣","١٤","١٥","١٦","١٧","١٨","١٩","٢٠"];
-  const countingWords=["صفر","واحد","اثنان","ثلاثة","أربعة","خمسة","ستة","سبعة","ثمانية","تسعة","عشرة","أحد عشر","اثنا عشر","ثلاثة عشر","أربعة عشر","خمسة عشر","ستة عشر","سبعة عشر","ثمانية عشر","تسعة عشر","عشرون"];
+  const englishNumbers=["0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20"];
+  const countingWordsAr=["صفر","واحد","اثنان","ثلاثة","أربعة","خمسة","ستة","سبعة","ثمانية","تسعة","عشرة","أحد عشر","اثنا عشر","ثلاثة عشر","أربعة عشر","خمسة عشر","ستة عشر","سبعة عشر","ثمانية عشر","تسعة عشر","عشرون"];
+  const countingWordsEn=["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen","twenty"];
   const objects=["","🍎","🍌","🍓","⚽","🎈","🚗","⭐","🧸","🌸","🧩","🍎","🍌","🍓","⚽","🎈","🚗","⭐","🧸","🌸","🧩"];
   const count=nurseryNumber;
+  const isEnglish=currentLanguage==="en";
+  const numbers=isEnglish ? englishNumbers : arabicNumbers;
+  const countingWords=isEnglish ? countingWordsEn : countingWordsAr;
 
-  nurseryBigNumber.textContent=arabicNumbers[count];
-  nurseryCounter.textContent=`${arabicNumbers[count]} / ${arabicNumbers[nurseryLearningEnd]}`;
-  $("nursery-platform-number").textContent=arabicNumbers[count];
+  nurseryBigNumber.textContent=numbers[count];
+  nurseryCounter.textContent=`${numbers[count]} / ${numbers[nurseryLearningEnd]}`;
+  $("nursery-platform-number").textContent=numbers[count];
 
   const icon=objects[count];
   const cells=Array.from({length:count},()=>`<span class="nursery-count-item">${icon}</span>`);
   nurseryObjects.innerHTML=cells.join("");
 
   $("nursery-next-btn").textContent=
-    count===nurseryLearningEnd ? "🎉 خلصنا الأرقام" : "التالي ➜";
+    count===nurseryLearningEnd ? (currentLanguage==="en"?"🎉 Numbers complete":"🎉 خلصنا الأرقام") : (currentLanguage==="en"?"Next ➜":"التالي ➜");
 
   playNurseryCounting(countingWords[count]);
 }
 
+let speechUnlocked=false;
+let speechVoicesReady=false;
+let nurseryArabicVoice=null;
+
+function getNurseryArabicVoice(){
+  if(!window.speechSynthesis) return null;
+  const voices=window.speechSynthesis.getVoices() || [];
+  return voices.find(v=>/^ar-EG$/i.test(v.lang)) ||
+         voices.find(v=>/^ar(-|_)/i.test(v.lang)) ||
+         voices.find(v=>/arabic|عربي/i.test(v.name||'')) ||
+         null;
+}
+
+function unlockMobileSpeech(){
+  if(!window.speechSynthesis) return;
+  try{
+    window.speechSynthesis.resume();
+    speechUnlocked=true;
+    const voices=window.speechSynthesis.getVoices() || [];
+    speechVoicesReady=voices.length>0;
+    nurseryArabicVoice=getNurseryArabicVoice();
+  }catch(e){}
+}
+
+if(window.speechSynthesis){
+  window.speechSynthesis.addEventListener('voiceschanged',()=>{
+    speechVoicesReady=true;
+    nurseryArabicVoice=getNurseryArabicVoice();
+  });
+}
+
 function playNurseryCounting(word){
   if(!window.speechSynthesis || !word) return;
-  window.speechSynthesis.cancel();
-  const utterance=new SpeechSynthesisUtterance(word);
-  utterance.lang="ar-EG";
-  utterance.rate=0.72;
-  utterance.pitch=1.15;
-  window.speechSynthesis.speak(utterance);
+
+  const isEnglish=currentLanguage==='en';
+
+  const speakNow=()=>{
+    try{
+      const speech=window.speechSynthesis;
+      speech.cancel();
+      speech.resume();
+
+      const utterance=new SpeechSynthesisUtterance(word);
+      utterance.rate=isEnglish ? 0.72 : 0.70;
+      utterance.pitch=isEnglish ? 1.15 : 1.08;
+      utterance.volume=1;
+
+      const voices=speech.getVoices() || [];
+      if(isEnglish){
+        const enVoice=voices.find(v=>/^en-US$/i.test(v.lang)) ||
+                      voices.find(v=>/^en(-|_)/i.test(v.lang)) ||
+                      voices.find(v=>v.lang && v.lang.toLowerCase().startsWith('en'));
+        utterance.lang=enVoice ? enVoice.lang : 'en-US';
+        if(enVoice) utterance.voice=enVoice;
+      }else{
+        // العربي: لا نعتمد على صوت واحد. نبحث عن أي Voice عربي ونربطه صراحة بالنطق.
+        const arVoice=getNurseryArabicVoice();
+        utterance.lang=arVoice ? arVoice.lang : 'ar-SA';
+        if(arVoice) utterance.voice=arVoice;
+      }
+
+      speech.speak(utterance);
+
+      // بعض نسخ Chrome على الموبايل تحتاج إعادة المحاولة بعد لحظة عند أول نطق عربي.
+      if(!isEnglish){
+        setTimeout(()=>{
+          try{
+            if(!speech.speaking && !speech.pending){
+              speech.cancel();
+              speech.resume();
+              const retry=new SpeechSynthesisUtterance(word);
+              retry.lang='ar-SA';
+              retry.rate=0.70;
+              retry.pitch=1.08;
+              retry.volume=1;
+              const arVoice=getNurseryArabicVoice();
+              if(arVoice) retry.voice=arVoice;
+              speech.speak(retry);
+            }
+          }catch(e){}
+        },700);
+      }
+    }catch(e){}
+  };
+
+  unlockMobileSpeech();
+
+  const voices=window.speechSynthesis.getVoices() || [];
+  if(voices.length===0){
+    let done=false;
+    const runOnce=()=>{
+      if(done)return;
+      done=true;
+      window.speechSynthesis.removeEventListener('voiceschanged',runOnce);
+      speakNow();
+    };
+    window.speechSynthesis.addEventListener('voiceschanged',runOnce);
+    setTimeout(runOnce,700);
+  }else{
+    setTimeout(speakNow,100);
+  }
 }
 
 $("nursery-next-btn").addEventListener("click",()=>{
@@ -4054,10 +4925,35 @@ $("age-back").addEventListener("click",()=>{
    EXIT
    ===================================================== */
 
-$("exit-btn").addEventListener(
-  "click",
-  goHome
-);
+$("exit-btn").addEventListener("click",()=>{
+  if(gameMode==="nursery" || gameMode==="nursery11"){
+    gameRunning=false;
+    clearInterval(timerInterval);
+    gameScreen.classList.add("hidden");
+    ageScreen.classList.remove("hidden");
+    return;
+  }
+
+  gameRunning=false;
+  clearInterval(timerInterval);
+  gameScreen.classList.add("hidden");
+
+  if(gameMode==="general"){
+    generalSectionsScreen.classList.remove("hidden");
+  }
+  else if(gameMode==="mental" && mentalSection===1){
+    mentalLevelScreen.classList.remove("hidden");
+  }
+  else if(gameMode==="mental" && mentalSection===2){
+    fiveRulesScreen.classList.remove("hidden");
+  }
+  else if(gameMode==="mental" && mentalSection===3){
+    tenRulesScreen.classList.remove("hidden");
+  }
+  else{
+    goHome();
+  }
+});
 
 /* =====================================================
    RETRY
@@ -4073,13 +4969,8 @@ $("retry-btn").addEventListener("click",()=>{
 
 $("home-btn").addEventListener("click",()=>{
   gameOverScreen.classList.add("hidden");
-  if(gameMode==="general"){
-    gameScreen.classList.add("hidden");
-    generalSectionsScreen.classList.remove("hidden");
-  }
-  else{
-    goHome();
-  }
+  gameScreen.classList.add("hidden");
+  $("exit-btn").click();
 });
 
 /* =====================================================
@@ -4154,7 +5045,87 @@ window.addEventListener("resize",()=>{
 });
 
 })();
+
+applyBackButtonLanguage();
 </script>
 
 </body>
 </html>
+<style>
+/* ===== تجربة التطوير: فطوط + نجوم + مكافأة ===== */
+#game-screen::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
+  background:
+    radial-gradient(circle at 18% 20%,rgba(255,255,255,.95) 0 1px,transparent 2px),
+    radial-gradient(circle at 78% 28%,rgba(118,225,255,.85) 0 1px,transparent 2px),
+    radial-gradient(circle at 35% 72%,rgba(255,255,255,.75) 0 1px,transparent 2px),
+    radial-gradient(circle at 88% 78%,rgba(255,255,255,.7) 0 1px,transparent 2px);
+  animation:extraStarTwinkle 2.8s ease-in-out infinite alternate;
+}
+@keyframes extraStarTwinkle{
+  0%{opacity:.35;transform:scale(1);}
+  50%{opacity:.8;}
+  100%{opacity:.45;transform:scale(1.015);}
+}
+
+/* حركة خفيفة لفطوط أثناء اللعب */
+#fatout:not(.jumping):not(.falling) .f-hair span:nth-child(1),
+#fatout:not(.jumping):not(.falling) .f-hair span:nth-child(3){
+  animation:hairBounce .7s ease-in-out infinite alternate;
+}
+@keyframes hairBounce{
+  from{transform:translateY(0) rotate(-25deg);}
+  to{transform:translateY(-2px) rotate(-20deg);}
+}
+#fatout:not(.jumping):not(.falling) .f-arm-left{
+  animation:armIdleLeft .9s ease-in-out infinite alternate;
+  transform-origin:top center;
+}
+#fatout:not(.jumping):not(.falling) .f-arm-right{
+  animation:armIdleRight .9s ease-in-out .15s infinite alternate;
+  transform-origin:top center;
+}
+@keyframes armIdleLeft{
+  from{transform:rotate(7deg);}
+  to{transform:rotate(-9deg);}
+}
+@keyframes armIdleRight{
+  from{transform:rotate(-7deg);}
+  to{transform:rotate(9deg);}
+}
+
+#fatout.jumping .f-arm-left{animation:jumpArmLeft .45s ease-out;transform-origin:top center;}
+#fatout.jumping .f-arm-right{animation:jumpArmRight .45s ease-out;transform-origin:top center;}
+#fatout.jumping .f-leg-left{animation:jumpLegLeft .45s ease-out;transform-origin:top center;}
+#fatout.jumping .f-leg-right{animation:jumpLegRight .45s ease-out;transform-origin:top center;}
+@keyframes jumpArmLeft{0%,100%{transform:rotate(7deg)}40%{transform:rotate(-28deg)}70%{transform:rotate(-12deg)}}
+@keyframes jumpArmRight{0%,100%{transform:rotate(-7deg)}40%{transform:rotate(28deg)}70%{transform:rotate(12deg)}}
+@keyframes jumpLegLeft{0%,100%{transform:rotate(0)}45%{transform:rotate(-12deg)}}
+@keyframes jumpLegRight{0%,100%{transform:rotate(0)}45%{transform:rotate(12deg)}}
+
+/* لمعة صغيرة عند ظهور الإجابة الصحيحة */
+.step.correct-answer-hint{
+  animation:correctPlatformPulse .65s ease-in-out infinite alternate;
+}
+@keyframes correctPlatformPulse{
+  from{filter:brightness(1);box-shadow:0 0 0 rgba(255,230,80,0);}
+  to{filter:brightness(1.22);box-shadow:0 0 18px rgba(255,230,80,.8);}
+}
+
+@media(prefers-reduced-motion:reduce){
+  #game-screen::before,
+  #fatout:not(.jumping):not(.falling) .f-hair span:nth-child(1),
+  #fatout:not(.jumping):not(.falling) .f-hair span:nth-child(3),
+  #fatout:not(.jumping):not(.falling) .f-arm-left,
+  #fatout:not(.jumping):not(.falling) .f-arm-right,
+  #fatout.jumping .f-arm-left,
+  #fatout.jumping .f-arm-right,
+  #fatout.jumping .f-leg-left,
+  #fatout.jumping .f-leg-right,
+  .step.correct-answer-hint{animation:none;}
+}
+</style>
